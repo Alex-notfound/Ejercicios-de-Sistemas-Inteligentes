@@ -12,8 +12,9 @@
 
 +!queja("Dame un caramelo").
 +!queja("Quiero un helado").
-+!queja("Quiero ir al parque") <- .print("Jose: Ya vamos Clara").
++!queja("Quiero ir al parque") <- .print("Jose: Ya vamos Clara"); .send(clara,achieve,digoQue("Ya vamos Clara")).
 +!digoQue("Adios don Jose").
++!digoQue("Por fin!!") <- .abolish(Percepts[source(pepe)]);.abolish(Percepts[source(clara)]).
 
 
 /* Plans */
