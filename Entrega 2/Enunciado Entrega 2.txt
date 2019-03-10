@@ -1,0 +1,11 @@
+
+ENUNCIADO ENTREGA 2
+
+
+Construir un programa AgentSpeak que compile en Jason y que de solución al problema de adivinar el numero de zapato y la edad planteado en la carpeta Laboratorio mediante un preprocesado de las ordenes contenidas en las cadenas de caracteres que emplea el adivino para obtener la información necesaria.
+
+ESCENARIO 1: Participan un adivino y un publico de entre 50 y 100 agentes entre los que el adinino procederá a elegir a su victima.
+
+ESCENARIO 2: Participan un adivino, una ayudante y no menos de 101 agentes como público. En este caso la elección de la victima la realizará la ayudante despues de realizar un proceso de cribado de en tres tandas: en la primera elige 10 agentes, en la segunda elige 5 y por último elige al candidato. A continuación el elegido será interpelado por el adivino y se procederá a adivinar.
+
+ESCENARIO 3: El adivino procederá a realizar su truco sobre un numero de agentes entre 30 y 50, con la ayuda de su ayudante. En este caso el adivino realizará estruco sobre la totalidad de los agentes presentes en el orden que indique la ayudante.
