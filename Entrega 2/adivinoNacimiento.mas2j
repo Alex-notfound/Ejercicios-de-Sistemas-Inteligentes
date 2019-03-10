@@ -1,0 +1,22 @@
+/*
+    adivinoNacimiento
+    ---------------------------
+
+    Jason Project File
+
+    This file defines the initial state of the MAS
+
+    Jason 
+    febrero 18, 2019 - 21:57:19
+*/
+
+MAS adivinoNacimiento {
+	
+    infrastructure: Centralised
+	//environment: myEnv
+    agents:
+        adivino;
+        publico #51;
+
+}
+
