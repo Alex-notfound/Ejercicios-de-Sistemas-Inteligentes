@@ -1,0 +1,35 @@
+ENUNCIADO ENTREGA 1
+
+Construir un programa AgentSpeak que compile en Jason y que de soporte al menos a tres agentes: Jose, Pepe, Clara
+
+El programa debe desarrollar la siguiente conversación entre los agentes Jose y Pepe:
+
+Jose: Hola don Pepito
+
+Pepito: Hola don Jose
+
+Jose: Paso usted por mi casa
+
+Pepito: Por su casa yo pase
+
+Jose: Vio usted a mi abuela
+
+Pepito: A su abuela yo la vi
+
+Jose: Adios don Pepito
+
+Pepito: Adios don Jose.
+
+La comunicación entre agentes para llevar a cabo la conversación se realizará mediante el envio de objetivos de la forma digoQue(String) => utilizar la directiva achieve en lugar de tell
+
+Durante la conversación se espera que el agente Clara (que representa a la hija de 6 años de Blanca que es la hermana de José) esté constantemente demandando la atención de Pepe y de Jose mediante el envió de mensajes a las BC de Jose y de Pepe de la forma: queja(String), burla(String)
+
+La atención de Clara por parte de los agentes se realizará mediante el envio de objetivos con la misma estructura que la empleada en la conversación entre Jose y Pepe => digoQue(String) y también será este el mecanismo de comunicación que emplee Clara para responder en este caso.
+
+La solución que se desarrolle debe preservar la conversación original y contener la solución a los dos escenarios que plantea la inclusión de clara:
+
+ESCENARIO 1 Pepe y Jose pasan de Clara
+
+ESCENARIO 2 Al menos uno de ellos hace caso a Clara
+
+Se debe tener en cuenta que desde el punto de vista de la programación en AgentSpeak es posible atender simultaneamente las demandas de dos o más agentes, por lo que la visualición de lo que ocurre debe ser modificada adecuadamente para adaptarse a esa nueva situación.
