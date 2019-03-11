@@ -28,23 +28,18 @@ identificaOperaciones("", []).
 	
 identificaOperaciones(String, [Op|RestoOp]) :-
 	producto(String, Op, RestoString) &
-	.print("Me están pidiendo que multiplique ", Op) &
 	identificaOperaciones(RestoString, RestoOp).
 identificaOperaciones(String, [Op|RestoOp]) :-
 	memoriza(String, Op, RestoString) &
-	.print("Me están pidiendo que memorice el numero") &
 	identificaOperaciones(RestoString,RestoOp).
 identificaOperaciones(String, [Op|RestoOp]) :-
 	suma(String, Op, RestoString) &
-	.print("Me están pidiendo que añada ", Op) &
 	identificaOperaciones(RestoString,RestoOp).
 identificaOperaciones(String, [Op|RestoOp]) :-
 	reparte(String, Op, RestoString) &
-	.print("Me están pidiendo que divida ", Op) &
 	identificaOperaciones(RestoString,RestoOp).
 identificaOperaciones(String, [Op|RestoOp]) :-
 	resta(String, Op, RestoString) &
-	.print("Me están pidiendo que reste ", Op) &
 	identificaOperaciones(RestoString,RestoOp).
 identificaOperaciones(String, [Op|RestoOp]) :-
 	decir(String, Op, RestoString) & resultado(N) & resultadoFinal(N) & .send(adivino,tell,fin(N)).
