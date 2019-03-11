@@ -1,6 +1,8 @@
 // Agent ayudante in project adivinoNacimiento.mas2j
 
 /* Initial beliefs and rules */
+crearDescartados(L):-
+	.concat([ayudante],[adivino],L).
 tanda1(Publico) :-
 	.all_names(Agentes) & 
 	.my_name(Self) & 
@@ -19,15 +21,23 @@ tanda3(Publico,Res2) :-
 	.shuffle(Publico, Ag) &
 	.member(Res2, Ag).
 	
-seleccionarSiguiente(L,Publico) :-
-	.shuffle(L, Ag) &
-	.my_name(Self) &
-	.member (Publico, Ag) & 
-	not Self = Publico.
-	
+seleccionarSiguiente(Publico) :-
+	.all_names(Agentes)&
+	descartados(L)&
+	.difference(Agentes, L, Ag)&
+	.shuffle(Ag, Ag2) &
+	.member (Publico, Ag2)&
+	.concat(L,[Publico],X)&
+	.abolish(descartados(_)) &
+	.asserta(descartados(X)).
+
 /* Initial goals */
 
+!start.
+
 /* Plans */
 
++!start : crearDescartados(L) <- +descartados(L).
+
 +escenario(2)[source(Ag)] : tanda1(Publico) & tanda2(Publico, Res) & tanda3(Res,Res2) <- .print("La victima sera ", Res2); .send(Ag,tell,adivinar2(Res2)).
-+escenario(3)[source(Ag)] : .print("3").//seleccionarSiguiente(L,Publico) <- .send(Ag,tell,adivinar3(Publico) .
++escenario(3)[source(Ag)] : seleccionarSiguiente(Publico) <- .print("La siguiente victima sera ", Publico); .send(Ag,tell,adivinar3(Publico)); .abolish(Percepts[source(Ag)]).
