@@ -15,30 +15,25 @@ calcula(N,Edad,Mes) :-
 	Mes = Numero div 100.
 
 seleccionaEscenario(N):-
-	N = math.round(math.random(1))+1.
+	N = math.round(math.random(2))+1.
 
 /* Initial goals */
 !start.
 
 /* Plans */
 
-+!start : seleccionaEscenario(N) <- .print("Escenario: ", N);if(N==1){!adivinar}if(N==2){.send(ayudante,tell,escenario(2))}if(N==3){.send(ayudante,tell,escenario(3))}.
-//+!start : true <- !adivinar.
-//+!start : true <- .send(ayudante,tell,escenario(1)).
-//+!start : true <- .send(ayudante,tell,escenario(2)).
-//+!start : true <- .send(ayudante,tell,escenario(3)).
+//+!start : seleccionaEscenario(N) <- .print("Escenario: ", N);if(N==1){!adivinar}if(N==2){.send(ayudante,tell,escenario(2))}if(N==3){.send(ayudante,tell,escenario(3))}.
++!start : true <- .send(ayudante,tell,escenario(3)).
 +!adivinar : escoge(Publico) <- 
 	.print("Escojo al agente ",Publico);
 	.send(Publico,tell,solicitud("Memoriza el número de orden del mes de nacimiento."));
 	.print("Memoriza el número de orden del mes de nacimiento.");
 	.wait(400);
-	.print("Multiplica 2");
+	.print("Multiplica por 2, sumale 5 y memorizalo");
 	.send(Publico,tell,solicitud("Multiplica 2"));
 	.wait(400);
-	.print("suma 5");
 	.send(Publico,tell,solicitud("Suma 5"));
 	.wait(400);
-	.print("Memoriza el número");
 	.send(Publico,tell,solicitud("Memorizalo"));
 	.wait(400);
 	.print("Ahora multiplica el número memorizado por 50 y memorízalo nuevamente.");
@@ -53,13 +48,11 @@ seleccionaEscenario(N):-
 	.send(Publico,tell,solicitud("Memoriza el número de orden del mes de nacimiento."));
 	.print("Memoriza el número de orden del mes de nacimiento.");
 	.wait(400);
-	.print("Multiplica 2");
+	.print("Multiplica por 2, sumale 5 y memorizalo");
 	.send(Publico,tell,solicitud("Multiplica 2"));
 	.wait(400);
-	.print("suma 5");
 	.send(Publico,tell,solicitud("Suma 5"));
 	.wait(400);
-	.print("Memoriza el número");
 	.send(Publico,tell,solicitud("Memorizalo"));
 	.wait(400);
 	.print("Ahora multiplica el número memorizado por 50 y memorízalo nuevamente.");
@@ -74,13 +67,11 @@ seleccionaEscenario(N):-
 	.send(Publico,tell,solicitud("Memoriza el número de orden del mes de nacimiento."));
 	.print("Memoriza el número de orden del mes de nacimiento.");
 	.wait(400);
-	.print("Multiplica 2");
+	.print("Multiplica por 2, sumale 5 y memorizalo");
 	.send(Publico,tell,solicitud("Multiplica 2"));
 	.wait(400);
-	.print("suma 5");
 	.send(Publico,tell,solicitud("Suma 5"));
 	.wait(400);
-	.print("Memoriza el número");
 	.send(Publico,tell,solicitud("Memorizalo"));
 	.wait(400);
 	.print("Ahora multiplica el número memorizado por 50 y memorízalo nuevamente.");
@@ -89,12 +80,11 @@ seleccionaEscenario(N):-
 	.print("Suma al numero memorizado tu edad y dime el resultado");
 	.send(Publico,tell,solicitud("Suma al numero memorizado tu edad"));
 	.wait(400);
-	.send(Publico,tell,dime("Resultado")).
-
-/*+escenario(3) <- 
-	.all_names(Agentes);
-	.send(ayudante,tell,escenario3(Agentes)).
-*/
+	.send(Publico,tell,dime("Resultado"));
+	.wait(600);
+	.abolish(Percepts[source(ayudante)]);
+	.send(ayudante,tell,escenario(3)).
+	
 +fin(N)[source(Ag)]<-
 	?calcula(N,Edad,Mes);
 	.wait(400);
