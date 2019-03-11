@@ -15,18 +15,19 @@ calcula(N,Edad,Mes) :-
 	Mes = Numero div 100.
 
 seleccionaEscenario(N):-
-	N = math.round(math.random(2))+1.
-	
+	N = math.round(math.random(1))+1.
+
 /* Initial goals */
 !start.
 
 /* Plans */
 
-//+!start : seleccionaEscenario(N) <- .send(ayudante,tell,escenario(N)).
-+!start : true <- .send(ayudante,tell,escenario(1)).
++!start : seleccionaEscenario(N) <- .print("Escenario: ", N);if(N==1){!adivinar}if(N==2){.send(ayudante,tell,escenario(2))}if(N==3){.send(ayudante,tell,escenario(3))}.
+//+!start : true <- !adivinar.
+//+!start : true <- .send(ayudante,tell,escenario(1)).
 //+!start : true <- .send(ayudante,tell,escenario(2)).
 //+!start : true <- .send(ayudante,tell,escenario(3)).
-+adivinar1 : escoge(Publico) <- 
++!adivinar : escoge(Publico) <- 
 	.print("Escojo al agente ",Publico);
 	.send(Publico,tell,solicitud("Memoriza el número de orden del mes de nacimiento."));
 	.print("Memoriza el número de orden del mes de nacimiento.");
@@ -90,12 +91,10 @@ seleccionaEscenario(N):-
 	.wait(400);
 	.send(Publico,tell,dime("Resultado")).
 
-
-
-+escenario(3) <- 
+/*+escenario(3) <- 
 	.all_names(Agentes);
 	.send(ayudante,tell,escenario3(Agentes)).
-
+*/
 +fin(N)[source(Ag)]<-
 	?calcula(N,Edad,Mes);
 	.wait(400);
