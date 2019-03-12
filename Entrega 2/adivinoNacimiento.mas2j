@@ -13,10 +13,9 @@
 MAS adivinoNacimiento {
 	
     infrastructure: Centralised
-	//environment: myEnv
+
     agents:
         adivino;
-        publico #51;
-
+		ayudante;
 }
 
