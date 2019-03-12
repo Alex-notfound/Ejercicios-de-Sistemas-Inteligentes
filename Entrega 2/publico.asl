@@ -7,59 +7,74 @@ creaMes(Mes) :-
 creaEdad(Edad) :-
 	Edad = math.round(math.random(99)).
 	
-convierteMes(enero,1).
-convierteMes(febrero,2).
-convierteMes(marzo,3).
-convierteMes(abril,4).
-convierteMes(mayo,5).
-convierteMes(junio,6).
-convierteMes(julio,7).
-convierteMes(agosto,8).
-convierteMes(septiembre,9).
-convierteMes(octubre,10).
-convierteMes(noviembre,11).
-convierteMes(diciembre,12).
+convertirMes(enero,1).
+convertirMes(febrero,2).
+convertirMes(marzo,3).
+convertirMes(abril,4).
+convertirMes(mayo,5).
+convertirMes(junio,6).
+convertirMes(julio,7).
+convertirMes(agosto,8).
+convertirMes(septiembre,9).
+convertirMes(octubre,10).
+convertirMes(noviembre,11).
+convertirMes(diciembre,12).
 
 procesa(String) :-
-	identificaOperaciones(String, ListaOp) &
+	leerOperaciones(String, ListaOp) &
 	realizaOperaciones(ListaOp).
 
-identificaOperaciones("", []).	
+leerOperaciones("", []).	
 	
-identificaOperaciones(String, [Op|RestoOp]) :-
+leerOperaciones(String, [Op|RestoOp]) :-
 	producto(String, Op, RestoString) &
-	identificaOperaciones(RestoString, RestoOp).
-identificaOperaciones(String, [Op|RestoOp]) :-
+	leerOperaciones(RestoString, RestoOp).
+leerOperaciones(String, [Op|RestoOp]) :-
 	memoriza(String, Op, RestoString) &
-	identificaOperaciones(RestoString,RestoOp).
-identificaOperaciones(String, [Op|RestoOp]) :-
+	leerOperaciones(RestoString,RestoOp).
+leerOperaciones(String, [Op|RestoOp]) :-
 	suma(String, Op, RestoString) &
-	identificaOperaciones(RestoString,RestoOp).
-identificaOperaciones(String, [Op|RestoOp]) :-
+	leerOperaciones(RestoString,RestoOp).
+leerOperaciones(String, [Op|RestoOp]) :-
 	reparte(String, Op, RestoString) &
-	identificaOperaciones(RestoString,RestoOp).
-identificaOperaciones(String, [Op|RestoOp]) :-
+	leerOperaciones(RestoString,RestoOp).
+leerOperaciones(String, [Op|RestoOp]) :-
 	resta(String, Op, RestoString) &
-	identificaOperaciones(RestoString,RestoOp).
-identificaOperaciones(String, [Op|RestoOp]) :-
+	leerOperaciones(RestoString,RestoOp).
+leerOperaciones(String, [Op|RestoOp]) :-
 	decir(String, Op, RestoString) & resultado(N) & resultadoFinal(N) & .send(adivino,tell,fin(N)).
 
 producto(String, prod(N), RestoString) :-
 	.substring("Multiplica ", String, Pos) &
 	.length("Multiplica ", Length) &
-	.delete(Pos, Length, String, SufixString) &
+	.delete(0, Pos+Length, String, SufixString) &
+	valor(SufixString, N, RestoString).
+producto(String, prod(N), RestoString) :-
+	.substring("Multiplicale", String, Pos) &
+	.length("Multiplicale", Length) &
+	.delete(0, Pos+Length, String, SufixString) &
+	valor(SufixString, N, RestoString).
+producto(String, prod(N), RestoString) :-
+	.substring("Multiplicalo por ", String, Pos) &
+	.length("Multiplicalo por ", Length) &
+	.delete(0, Pos+Length, String, SufixString) &
 	valor(SufixString, N, RestoString).
 producto(String, prod(N), RestoString) :-
 	.substring("multiplica ", String, Pos) &
 	.length("multiplica ", Length) &
-	.delete(Pos, Length, String, SufixString) &
+	.delete(0, Pos+Length, String, SufixString) &
 	valor(SufixString, N, RestoString).
 producto(String, prod(N), RestoString) :-
-	.substring("multiplica por ", String, Pos) &
-	.length("multiplica por ", Length) &
-	.delete(Pos, Length, String, SufixString) &
+	.substring("multiplicale ", String, Pos) &
+	.length("multiplicale ", Length) &
+	.delete(0, Pos+Length, String, SufixString) &
 	valor(SufixString, N, RestoString).
-
+producto(String, prod(N), RestoString) :-
+	.substring("multiplicalo por ", String, Pos) &
+	.length("multiplicalo por ", Length) &
+	.delete(0, Pos+Length, String, SufixString) &
+	valor(SufixString, N, RestoString).
+	
 memoriza(String, add(numero(N)), "") :-
 	.substring("Memoriza ", String) &
 	resultado(N).
@@ -72,16 +87,28 @@ memoriza(String, add(numero(N)), "") :-
 memoriza(String, add(numero(N)), "") :-
 	.substring("memorizalo", String) &
 	resultado(N).
+	
 suma(String, add(N), RestoString) :-
 	.substring("Suma ", String, Pos) &
 	.length("Suma ", Length) &
-	.delete(Pos, Length, String, RestString) &
+	.delete(0, Pos+Length, String, RestString) &
 	valor(RestString, N, RestoString).
 suma(String, add(N), RestoString) :-
-	.substring("suma ", String, Pos1) &
-	.length("suma ", Length) &
-	.delete(Pos, Length, String, RestString) &
+	.substring("Sumale ", String, Pos) &
+	.length("Sumale ", Length) &
+	.delete(0, Pos+Length, String, RestString) &
 	valor(RestString, N, RestoString).
+suma(String, add(N), RestoString) :-
+	.substring("suma ", String, Pos) &
+	.length("suma ", Length) &
+	.delete(0, Pos+Length, String, RestString) &
+	valor(RestString, N, RestoString).
+suma(String, add(N), RestoString) :-
+	.substring("sumale ", String, Pos) &
+	.length("sumale ", Length) &
+	.delete(0, Pos+Length, String, RestString) &
+	valor(RestString, N, RestoString).
+	
 valor(String, N, RestoString):-
 	.substring("edad", String, Pos) &
 	.length("edad", Length) &
@@ -129,12 +156,13 @@ realizaOperaciones([prod(N)|Tl]):-
 	.abolish(resultado(_)) &
 	.asserta(resultado(N*Res)) &
 	realizaOperaciones(Tl).
+	
 /* Initial goals */
 
 !start.
 
 /* Plans */
-+!start : creaMes(Mes) & convierteMes(Nombre,Mes) & creaEdad(Edad) 
++!start : creaMes(Mes) & convertirMes(Nombre,Mes) & creaEdad(Edad) 
 	<- +edad(Edad) ; +naciEn(Mes) ; +resultado(Mes).
 	
 +solicitud(String) : procesa(String) & resultado(Y) <- .print("Realizado: ",String, " | Total: ", Y).
