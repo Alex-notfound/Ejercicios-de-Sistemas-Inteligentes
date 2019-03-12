@@ -16,28 +16,32 @@ calcula(N,Edad,Mes) :-
 
 seleccionaEscenario(N):-
 	N = math.round(math.random(2))+1.
+numAgentes(0).
 
 /* Initial goals */
 !start.
 
 /* Plans */
 
-//+!start : seleccionaEscenario(N) <- .print("Escenario: ", N);if(N==1){!adivinar}if(N==2){.send(ayudante,tell,escenario(2))}if(N==3){.send(ayudante,tell,escenario(3))}.
-+!start : true <- .send(ayudante,tell,escenario(3)).
++!start : seleccionaEscenario(N) <- .print("Escenario: ", N);
+		if(N==1){while(numAgentes(X) & X<55){.create_agent(publico,"publico.asl");-+numAgentes(X+1);}!adivinar}
+		if(N==2){while(numAgentes(X) & X<105){.create_agent(publico,"publico.asl");-+numAgentes(X+1);}.send(ayudante,tell,escenario(2))}
+		if(N==3){while(numAgentes(X) & X<35){.create_agent(publico,"publico.asl");-+numAgentes(X+1);}.send(ayudante,tell,escenario(3))}.
+
 +!adivinar : escoge(Publico) <- 
 	.print("Escojo al agente ",Publico);
 	.send(Publico,tell,solicitud("Memoriza el número de orden del mes de nacimiento."));
 	.print("Memoriza el número de orden del mes de nacimiento.");
 	.wait(400);
-	.print("Multiplica por 2, sumale 5 y memorizalo");
-	.send(Publico,tell,solicitud("Multiplica 2"));
+	.print("A continuacion multiplicalo por 2, sumale 5 y memorizalo");
+	.send(Publico,tell,solicitud("A continuacion multiplicalo por 2"));
 	.wait(400);
-	.send(Publico,tell,solicitud("Suma 5"));
+	.send(Publico,tell,solicitud("sumale 5"));
 	.wait(400);
-	.send(Publico,tell,solicitud("Memorizalo"));
+	.send(Publico,tell,solicitud("y memorizalo"));
 	.wait(400);
-	.print("Ahora multiplica el número memorizado por 50 y memorízalo nuevamente.");
-	.send(Publico,tell,solicitud("multiplica 50 y memorizalo nuevamente."));
+	.print("Ahora multiplica el número memorizado por 50 y memorizalo nuevamente.");
+	.send(Publico,tell,solicitud("Ahora multiplica 50 y memorizalo nuevamente."));
 	.wait(400);
 	.print("Suma al numero memorizado tu edad y dime el resultado");
 	.send(Publico,tell,solicitud("Suma al numero memorizado tu edad"));
@@ -48,15 +52,15 @@ seleccionaEscenario(N):-
 	.send(Publico,tell,solicitud("Memoriza el número de orden del mes de nacimiento."));
 	.print("Memoriza el número de orden del mes de nacimiento.");
 	.wait(400);
-	.print("Multiplica por 2, sumale 5 y memorizalo");
-	.send(Publico,tell,solicitud("Multiplica 2"));
+	.print("A continuacion multiplicalo por 2, sumale 5 y memorizalo");
+	.send(Publico,tell,solicitud("A continuacion multiplicalo por 2"));
 	.wait(400);
-	.send(Publico,tell,solicitud("Suma 5"));
+	.send(Publico,tell,solicitud("sumale 5"));
 	.wait(400);
-	.send(Publico,tell,solicitud("Memorizalo"));
+	.send(Publico,tell,solicitud("y memorizalo"));
 	.wait(400);
-	.print("Ahora multiplica el número memorizado por 50 y memorízalo nuevamente.");
-	.send(Publico,tell,solicitud("multiplica 50 y memorizalo nuevamente."));
+	.print("Ahora multiplica el número memorizado por 50 y memorizalo nuevamente.");
+	.send(Publico,tell,solicitud("Ahora multiplica 50 y memorizalo nuevamente."));
 	.wait(400);
 	.print("Suma al numero memorizado tu edad y dime el resultado");
 	.send(Publico,tell,solicitud("Suma al numero memorizado tu edad"));
@@ -64,18 +68,18 @@ seleccionaEscenario(N):-
 	.send(Publico,tell,dime("Resultado")).
 
 +adivinar3(Publico) <- 
-	.send(Publico,tell,solicitud("Memoriza el número de orden del mes de nacimiento."));
+.send(Publico,tell,solicitud("Memoriza el número de orden del mes de nacimiento."));
 	.print("Memoriza el número de orden del mes de nacimiento.");
 	.wait(400);
-	.print("Multiplica por 2, sumale 5 y memorizalo");
-	.send(Publico,tell,solicitud("Multiplica 2"));
+	.print("A continuacion multiplicalo por 2, sumale 5 y memorizalo");
+	.send(Publico,tell,solicitud("A continuacion multiplicalo por 2"));
 	.wait(400);
-	.send(Publico,tell,solicitud("Suma 5"));
+	.send(Publico,tell,solicitud("sumale 5"));
 	.wait(400);
-	.send(Publico,tell,solicitud("Memorizalo"));
+	.send(Publico,tell,solicitud("y memorizalo"));
 	.wait(400);
-	.print("Ahora multiplica el número memorizado por 50 y memorízalo nuevamente.");
-	.send(Publico,tell,solicitud("multiplica 50 y memorizalo nuevamente."));
+	.print("Ahora multiplica el número memorizado por 50 y memorizalo nuevamente.");
+	.send(Publico,tell,solicitud("Ahora multiplica 50 y memorizalo nuevamente."));
 	.wait(400);
 	.print("Suma al numero memorizado tu edad y dime el resultado");
 	.send(Publico,tell,solicitud("Suma al numero memorizado tu edad"));
