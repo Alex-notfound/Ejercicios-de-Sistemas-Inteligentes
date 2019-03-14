@@ -1,0 +1,18 @@
+ENUNCIADO ENTREGA 3
+
+En el mundo de Jasón hay dos agentes que se entretienen realizando deducciones lógicas sobre números. A continuación planteamos el enigma que intentan resolver esta semana dichos agentes:
+
+Hay dos números, M y N, tales que 1 < M < 100, 1 < N < 100 y dos agentes muy listos, "Social" y "Pusilanime". A Social se le dice la suma de los dos números que debe adivinar y a Pusilanime se le dice el producto de dichos números. Además Social sabe que Pusilanime conoce el producto y Pusilanime sabe que Social conoce la suma. Despues de un rato de razonamiento de ambos agentes se produce el siguiente diálogo entre ambos:
+
+Pusilanime: Social se que sabes que yo se cual es el producto, y sé que tu sabes cual es la suma, pero no sé cuáles son los números.
+Social: Pusilanime ya sabía que desconocias cuáles eran los números; yo también los desconozco.
+Pusilanime: Sin embargo, ahora ya se cuáles son los números!.
+Social: Ahora yo también los sé!.
+
+a) Escribe un programa lógico en Jasón que implemente el diálogo anterior y que permita a los agentes mostrar por pantalla al usuario los números buscados.
+
+b) Modifica el programa anterior para elaborar una nueva conversación en caso de que Pusilanime indicase en el primer mensaje que conocía cuales eran los números.
+
+c) Modifica el programa para elaborar una nueva conversación en caso de que Social indicase después de la respuesta de Pusilanime que él si conoce cuales son los números.
+
+NOTA: Ambos agentes tienen que comportarse de manera reactiva en función de la respuesta que obtengan del otro agente durante el intercambio de mensajes, y de manera deliberativa para razonar sobre cuales son posibles respuestas y cuales no.
