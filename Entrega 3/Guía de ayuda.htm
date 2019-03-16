@@ -1,0 +1,76 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/HTML; charset=iso-8859-1"  />
+</head>
+<body>
+<p>&nbsp;</p>
+<h2><span style="text-decoration: underline;"><strong>Enunciado</strong></span></h2>
+<p>El siguiente es un problema cl&aacute;sico en programaci&oacute;n l&oacute;gica. El enunciado de este problema es el siguiente:</p>
+<p>Hay dos n&uacute;meros, M y N, tales que 1 &lt; M &lt; 100, 1 &lt; N &lt; 100 y dos hombres muy listos, Mr. Social y Mr. Pusil&aacute;nime. A Mr. Social se le dice la suma de los dos n&uacute;meros y a Mr. Pusil&aacute;nime se le dice el producto.</p>
+<p>Adem&aacute;s Mr. Social sabe que Mr. Pusil&aacute;nime conoce el producto y Mr. Pusil&aacute;nime sabe que Mr. Social conoce la suma.</p>
+<p>Despu&eacute;s de unos minutos de tensa espera, ambos hombres mantienen el siguiente di&aacute;logo:</p>
+<p>-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="text-decoration: underline;">Mr. Pusil&aacute;nime</span>: No s&eacute; cu&aacute;les son los n&uacute;meros.</p>
+<p>-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="text-decoration: underline;">Mr. Social</span>: Ya sab&iacute;a que t&uacute; no lo sab&iacute;as; yo tampoco los s&eacute;.</p>
+<p>-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="text-decoration: underline;">Mr. Pusil&aacute;nime</span>: Ahora ya s&eacute; cu&aacute;les son los n&uacute;meros!</p>
+<p>-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="text-decoration: underline;">Mr. Social</span>: Ahora yo tambi&eacute;n lo s&eacute;!</p>
+<p>&nbsp;</p>
+<p>&iquest;Cu&aacute;les son los n&uacute;meros?</p>
+<h2>&nbsp;</h2>
+<p><span style="text-decoration: underline;"><strong>Soluci&oacute;n</strong></span></p>
+<p>A primera vista, el di&aacute;logo anterior resulta sorprendente, sin embargo, la soluci&oacute;n al dilema es s&oacute;lo cuesti&oacute;n de l&oacute;gica y de hacer algunas comprobaciones.</p>
+<p>Estudiemos detenidamente la informaci&oacute;n del enunciado:</p>
+<p><em>Buscamos dos n&uacute;meros M y N, siendo 1 &lt; M &le; N &lt; 100 (con M &le; N descartamos posibles soluciones sim&eacute;tricas como (23, 56) y (56, 23)); as&iacute; pues, los candidatos ser&aacute;n parejas de n&uacute;meros entre 2 y 99, cuyo primer elemento sea menor o igual que el segundo</em>.</p>
+<p>Sabiendo que Mr. Pusil&aacute;nime conoce el producto P = M &lowast; N y Mr. Social conoce la suma S = M + N, de cada una de las intervenciones de la conversaci&oacute;n pueden hacerse las siguientes deducciones:</p>
+<ol>
+<li>Si conociendo el producto P, Mr. Pusil&aacute;nime desconoce los n&uacute;meros es porque &ldquo;<em>debe existir m&aacute;s de una pareja de candidatos cuyo producto sea P</em>&rdquo;</li>
+<li>Mr. Social sabe que Mr. Pusil&aacute;nime conoce el producto P y adem&aacute;s sab&iacute;a (antes de que Mr. Pusil&aacute;nime lo dijese) que Mr. Pusil&aacute;nime no conoc&iacute;a los n&uacute;meros. Esto debe ser porque &ldquo;<em>para todas las parejas de candidatos cuya suma es S, el producto de tales parejas puede obtenerse como producto de los elementos de m&aacute;s de una pareja de candidatos</em>&rdquo;</li>
+<li>Adem&aacute;s Mr. Social tambi&eacute;n desconoce los n&uacute;meros, lo que indica que &ldquo;<em>hay m&aacute;s de una posible descomposici&oacute;n en sumandos</em>&rdquo;. Esta &uacute;ltima informaci&oacute;n en realidad es redundante, ya que para que s&oacute;lo hubiese una posible descomposici&oacute;n en sumandos, nuestras parejas candidatas tendr&iacute;an que ser (2, 2) o (99, 99) cuyos productos son 4 y 9801, que, en ambos casos, s&oacute;lo admiten una descomposici&oacute;n para Mr. Pusil&aacute;nime. Es decir, Mr. Pusil&aacute;nime conocer&iacute;a los n&uacute;meros M y N, pero anteriormente dijo que no los conoc&iacute;a</li>
+<li>Ahora Mr. Pusil&aacute;nime conoce los n&uacute;meros. Esto es porque entre las posibles parejas candidatas s&oacute;lo hay una cuya suma har&iacute;a que Mr. Social dijese lo anterior</li>
+<li>Despu&eacute;s Mr. Social tambi&eacute;n tiene los n&uacute;meros. Del mismo modo que antes, esto quiere decir que s&oacute;lo hay una pareja candidata que le permite Mr. Pusil&aacute;nime conocer los n&uacute;meros con la informaci&oacute;n que ten&iacute;a hace un momento.</li>
+</ol>
+<p>&nbsp;</p>
+<p>Desde el punto de vista l&oacute;gico el problema est&aacute; casi resuelto (no es dif&iacute;cil formalizar l&oacute;gicamente el problema), pero seguimos sin conocer efectivamente los n&uacute;meros (en el caso de que existan).</p>
+<p>Traslademos el razonamiento anterior a un programa l&oacute;gico que haga la b&uacute;squeda de la soluci&oacute;n (o soluciones) utilizando la t&eacute;cnica de &ldquo;<strong><em>generate &amp; test</em></strong>&rdquo; =&gt; <em>primero se generan candidatos y a continuaci&oacute;n se comprueba si el di&aacute;logo del enunciado tiene sentido</em>:</p>
+<p style="padding-left: 30px;"><strong>numeros(M,N) :- </strong></p>
+<p style="padding-left: 60px;"><strong>candidatos(M, N) &amp; </strong></p>
+<p style="padding-left: 60px;"><strong>doesntKnowP(M, N) &amp; </strong></p>
+<p style="padding-left: 60px;"><strong>knowsSthatPdoesntKnow(M, N) &amp; </strong></p>
+<p style="padding-left: 60px;"><strong>nowPknows(M, N) &amp; </strong></p>
+<p style="padding-left: 60px;"><strong>nowSknows(M, N).</strong></p>
+<p>Para la generaci&oacute;n de candidatos utilizaremos un predicado indeterminista:</p>
+<p style="padding-left: 30px;"><strong>candidatos(M, N) :-&nbsp;</strong><strong>entre(2, 99, M) &amp; entre(M,99,N).</strong></p>
+<p style="padding-left: 30px;"><strong>entre(X, Y, X) :-&nbsp;</strong><strong>X &lt;= Y.</strong></p>
+<p style="padding-left: 30px;"><strong>entre(X, Y, Z) :-&nbsp;</strong><strong>X &lt; Y &amp; entre(X+1, Y, Z).</strong></p>
+<p>Primero se genera un candidato M entre 2 y 99, y luego otro N entre M y 99. As&iacute; tenemos 1 &lt; M &le; N &lt; 100 y se evitan las simetr&iacute;as. El predicado <em>entre</em> devuelve indeterministamente un n&uacute;mero perteneciente a un intervalo dado. Para los predicados correspondientes al test necesitaremos dos predicados auxiliares:</p>
+<ul>
+<li>Uno de ellos, <strong><em>sumandos</em></strong>, debe generar todas las posibles descomposiciones de un n&uacute;mero como suma de otros dos: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
+</ul>
+<p style="padding-left: 60px;"><strong>sumandos(N, Sol) :-&nbsp;</strong><strong>firstSumandos(N, (X,Y)) &amp;&nbsp;</strong><strong>sumandos2(X,Y, Sol).</strong></p>
+<p style="padding-left: 60px;"><strong>firstSumandos(N, (2,(N-2))) :-&nbsp;</strong><strong>N &lt;= 101.</strong></p>
+<p style="padding-left: 60px;"><strong>firstSumandos(N, ((N-99),99)) :-&nbsp;</strong><strong>N &gt; 101.</strong></p>
+<p style="padding-left: 60px;"><strong>sumandos2(N, M, []) :-&nbsp;</strong><strong>N&gt;M.</strong></p>
+<p style="padding-left: 60px;"><strong>sumandos2(N, M, [(N, M) | Tail]) :-&nbsp;</strong><strong>N &lt;= M &amp;&nbsp;</strong><strong>sumandos2((N+1), (M-1), Tail).</strong></p>
+<p style="padding-left: 30px;">La idea es generar un par inicial mediante <em>firstSumandos</em>, cuyo segundo elemento sea m&aacute;ximo (dos casos). Por ejemplo, si el n&uacute;mero a descomponer es 145 el primer par ser&aacute; (46, 99) y si es 56 el par ser&aacute; (2, 54). Los siguientes pares se forman &ldquo;<em>quitando uno al segundo elemento y sum&aacute;ndolo al primero</em>&rdquo; (la suma del par permanece invariable) y esto es lo que hace <em>sumandos2</em>.</p>
+<ul>
+<li>El segundo predicado auxiliar <strong><em>factores</em></strong> sirve para generar todas las posibles descomposiciones de un n&uacute;mero N como producto de otros dos. Para ello se utiliza un contador que inicialmente vale 2, y se comprueba si existe otro n&uacute;mero tal que al multiplicarlo por el contador sea N. En <em>factores</em> se llama a <em>factores2</em> (con el contador inicializado a 2), que har&aacute; las comprobaciones e incrementar&aacute; el contador:</li>
+</ul>
+<p style="padding-left: 60px;"><strong>factores(N,L) :- &nbsp;factores2(N,2,L).</strong></p>
+<p style="padding-left: 60px;"><strong>factores2(N, M, []) :-&nbsp;&nbsp;M &gt; math.floor(math.sqrt(N)).</strong></p>
+<p style="padding-left: 60px;"><strong>factores2(N, M, L) :- (not N mod M =0 | N div M &gt;M) &amp; factores2(N, M+1,L).</strong></p>
+<p style="padding-left: 60px;"><strong>factores2(N, M, [(M, N div M)|L]) :- factores2(N, M+1, L).</strong>&nbsp;</p>
+<p>&nbsp;</p>
+<p>Los cuatro predicados del test correspondientes a cada una de las sentencias del di&aacute;logo ahora se pueden programar con bastante naturalidad como predicados, que compribar&aacute;n si una pareja (A, B) es candidata a soluci&oacute;n.</p>
+<p>El primero de ellos afirma que deben existir al menos dos descomposiciones como producto de dos n&uacute;meros para el n&uacute;mero: A &lowast; B:</p>
+<p style="padding-left: 30px;"><strong>doesntKnowP(A,B) :-&nbsp; factores(A*B,L) &amp; atLeastTwo(L).</strong></p>
+<p style="padding-left: 30px;"><strong>atLeastTwo [X, Y | Z].</strong></p>
+<p>El segundo debe comprobar que todas las posibles descomposiciones de A+B en sumandos verifican el test anterior; para ello utilizaremos un predicado auxiliar&nbsp;<strong><em>allDoesntKnowP</em></strong>&nbsp;que comprueba que todos los elementos de una lista verifican la propiedad <strong><em>doesntKnowP</em></strong>:</p>
+<p style="padding-left: 30px;"><strong>allDoesntKnowP([]).<br /> allDoesntKnowP([(X,Y)|Tl] :- <br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; doesntKnowP(X,Y) &amp; allDoesntKnowP(Tl).</strong></p>
+<p style="padding-left: 30px;"><strong>knowsSthatPdoesntKnow (A, B) :- <br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sumandos(A+B, L) &amp; allDoesntKnowP(L).</strong></p>
+<p>El tercer test comprueba que s&oacute;lo existe un posible candidato que verifique el segundo test. Y el &uacute;ltimo test comprueba que s&oacute;lo hay un candidato que cumpla el tercer test. De este modo estamos propagando la informaci&oacute;n de un test al siguiente, que restringir&aacute; a&uacute;n m&aacute;s el conjunto de posibles soluciones.</p>
+<p>El tercer test queda de este modo:</p>
+<p style="padding-left: 30px;"><strong>nowPknows(A, B) :- &nbsp;<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; factores(A*B, L) &amp; <br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; existsOneKnowsSthatPdoesntKnow(L).</strong></p>
+<p style="padding-left: 30px;"><strong>existsOneKnowsSthatPdoesntKnow([(A, B) | Tl]) :-<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; knowsSthatPdoesntKnow(A, B) &amp;<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; noOneKnowsSthatPdoesntKnow(Tl).<br /> existsOneKnowsSthatPdoesntKnow([(A, B) | Tl]) :-<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; not knowsSthatPdoesntKnow(A, B) &amp;<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; existsOneKnowsSthatPdoesntKnow(Tl).</strong></p>
+<p>Mientras que el cuarto test queda como:</p>
+<p style="padding-left: 30px;"><strong>nowSknows(A, B) :-<br /> &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;sumandos(A+B, L) &amp;<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; existsOneNowPknows(L).</strong></p>
+<p style="padding-left: 30px;"><strong>existsOneNowPknows([(A, B) | Tl]) :-<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; nowPknows(A, B) &amp;<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; noOneNowPknows(Tl).<br /> existsOneNowPknows ([(A, B) | Tl]) :-<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; not nowPknows(A, B) &amp;<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; existsOneNowPknows(Tl).</strong></p>
+<p>Con esto concluye el programa.</p></body></html>
