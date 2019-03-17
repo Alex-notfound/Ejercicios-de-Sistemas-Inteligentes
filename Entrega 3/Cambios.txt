@@ -1,0 +1,2 @@
+A corregir en el codigo base:
+factores2(N,M,L) :- (not N mod M =0 | N div M >M) & 
