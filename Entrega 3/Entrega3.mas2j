@@ -1,0 +1,10 @@
+
+MAS entrega3 {
+    infrastructure: Centralised
+    agents:
+        social;
+        pusilanime;
+
+}
+
+
