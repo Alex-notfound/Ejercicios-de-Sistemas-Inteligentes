@@ -8,6 +8,10 @@ answer(pepe, "Por su casa yo pase", "Vio usted a mi abuela?"):-
 	.print("Jose: Vio usted a mi abuela?").
 answer(pepe, "A su abuela yo la vi", "Adios don Pepito"):-
 	.print("Jose: Adios don Pepito.").
+answer(clara, "No me haces caso y se lo dire a mama", "Si que te estoy haciendo caso Clara"):- 
+	.print("Si que te estoy haciendo caso Clara").
+answer("Hola", "Buenas"):- 
+	.print("Buenas").
 
 /* Initial goals */
 
@@ -15,38 +19,22 @@ answer(pepe, "A su abuela yo la vi", "Adios don Pepito"):-
 
 /* Plans */
 
-+!start //: true <- 
-	: .all_names(All) & .member(pepe,All) <-  //He de comenzar la conversacion
++!start : .all_names(All) & .member(pepe,All) <-  //He de comenzar la conversacion
 	.print("Jose: Hola don Pepito");
-	.send(pepe, tell, saludos("Hola don Pepito")).
+	.broadcast(tell, digoQue("Hola don Pepito")).
 	
 +!start <-
 	.print("Hola a todos.").
 
-+saludos(Frase)[source(Sender)] 
++digoQue(Frase)[source(Sender)] 
 	: answer(Sender, Frase, Answer) <-
-		.send(Sender,tell,saludos(Answer)).
+		.broadcast(tell,digoQue(Answer)).
 
-+saludos("Adios don Jose")[source(pepe)] <-
-	.send(pepe, tell, adios);
-	.abolish(Percepts[source(pepe)]);
-	.print("Elimino la conversación de Pepe").
++digoQue("Adios don Jose")[source(pepe)] <-
+	.broadcast(tell, adios);
+	.abolish(Percepts[source(pepe)]).
 	
-+hello[source(pepe)]: true <- 
-	.print("Paso usted por mi casa?"). // Completar a partir de aqui
-	
-/*
++digoQue("Hola") : answer("Hola", Answer) <- 
+	.broadcast(tell, digoQue(Answer)).  
 
-La conversación entera es:
-
-jose: Hola D. Pepito
-pepe: Hola D. Jose
-jose: Paso usted por mi casa?
-pepe: Por su casa yo pase
-jose: Vio usted a mi abuela
-pepe: A su abuela yo la vi
-jose: Adios D. Pepito
-pepe: Adios D. Jose
-
-*/
-
++queja(Frase)[source(Sender)]: answer(Sender, Frase, Answer) <- .send(Sender,tell,digoQue(Answer)).
