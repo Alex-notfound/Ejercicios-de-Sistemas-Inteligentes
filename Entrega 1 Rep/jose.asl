@@ -19,22 +19,28 @@ answer("Hola", "Buenas"):-
 
 /* Plans */
 
-+!start : .all_names(All) & .member(pepe,All) <-  //He de comenzar la conversacion
++!start : .all_names(All) & .member(pepe,All) <-
 	.print("Jose: Hola don Pepito");
-	.broadcast(tell, digoQue("Hola don Pepito")).
+	.broadcast(achieve, digoQue("Hola don Pepito")).
 	
 +!start <-
 	.print("Hola a todos.").
 
-+digoQue(Frase)[source(Sender)] 
-	: answer(Sender, Frase, Answer) <-
-		.broadcast(tell,digoQue(Answer)).
-
-+digoQue("Adios don Jose")[source(pepe)] <-
-	.broadcast(tell, adios);
++!digoQue(Frase)[source(Sender)] 
+	: answer(Sender, Frase, Answer) & .all_names(All) & .member(Sender,All)<-
+		.broadcast(achieve,digoQue(Answer)).
+		
++!digoQue("Adios don Jose")[source(pepe)]: .all_names(All) & .member(pepe,All) <-
+	.send(pepe,achieve,adios);
 	.abolish(Percepts[source(pepe)]).
 	
-+digoQue("Hola") : answer("Hola", Answer) <- 
-	.broadcast(tell, digoQue(Answer)).  
++!digoQue("Hola")[source(Sender)] : answer("Hola", Answer)& .all_names(All) & .member(Sender,All) <- 
+	.broadcast(achieve, digoQue(Answer)).  
 
-+queja(Frase)[source(Sender)]: answer(Sender, Frase, Answer) <- .send(Sender,tell,digoQue(Answer)).
++!digoQue(Frase):true.
+
++!queja(Frase)[source(Sender)]: answer(Sender, Frase, Answer) & .all_names(All) & .member(Sender,All) <- .send(Sender,achieve,digoQue(Answer)).
+
++!queja(Frase):true.
+
++!burla(Frase):true.
