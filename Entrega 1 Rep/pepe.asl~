@@ -13,11 +13,21 @@ answer(jose, "Adios don Pepito", "Adios don Jose"):-
 
 /* Initial goals */
 
+//!start.
+
 /* Plans */
 
-+digoQue(Frase)[source(Sender)] 
++saludos(Frase)[source(Sender)] 
 	: answer(Sender,Frase,Answer) <-
-		.broadcast(tell,digoQue(Answer)).
+		.send(Sender,tell,saludos(Answer)).
 
 +adios[source(jose)]: true <- 
-	.abolish(Percepts[source(jose)]).
+	//.print("Adios don Jose");
+	.abolish(Percepts[source(jose)]);
+	.print("Elimino la conversación de Jose").
+		
++hello[source(A)]: true <- 
+	//.print("I received a 'hello' from ", A);
+	.print("Hola Don Jose.");
+	.send(A,tell,hello).
+
