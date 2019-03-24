@@ -15,9 +15,13 @@ answer(jose, "Adios don Pepito", "Adios don Jose"):-
 
 /* Plans */
 
-+digoQue(Frase)[source(Sender)] 
-	: answer(Sender,Frase,Answer) <-
-		.broadcast(tell,digoQue(Answer)).
++!digoQue(Frase)[source(Sender)] : answer(Sender,Frase,Answer) & .all_names(All) & .member(Sender,All)<-
+		.wait(1000);
+		.broadcast(achieve,digoQue(Answer)).
 
-+adios[source(jose)]: true <- 
++!adios[source(jose)]: true <- 
 	.abolish(Percepts[source(jose)]).
+	
++!queja(Frase):true.
+
++!burla(Frase):true.
