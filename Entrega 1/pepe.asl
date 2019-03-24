@@ -2,17 +2,26 @@
 
 /* Initial beliefs and rules */
 
+answer(jose, "Hola don Pepito", "Hola don Jose"):-
+	.print("Pepito: Hola don Jose").
+answer(jose, "Paso usted por mi casa?", "Por su casa yo pase"):-
+	.print("Pepito: Por su casa yo pase").
+answer(jose, "Vio usted a mi abuela?", "A su abuela yo la vi"):-
+	.print("Pepito: A su abuela yo la vi").
+answer(jose, "Adios don Pepito", "Adios don Jose"):-
+	.print("Pepito: Adios don Jose.").
+
 /* Initial goals */
-
-//!start.
-+!digoQue("Hola don Pepito") <- .print("Pepe: Hola don Jose"); .send(jose,achieve,digoQue("Hola don Jose")).
-+!digoQue("Paso usted por mi casa?") <- .print("Pepe: Por su casa yo pase"); .send(jose,achieve,digoQue("Por su casa yo pase")).
-+!digoQue("Vio usted a mi abuela?")<-  .print("Pepe: A su abuela yo la vi"); .send(jose,achieve,digoQue("A su abuela yo la vi")).
-+!digoQue("Adios don Pepito")<-.print("Pepe: Adios don Jose"); .send(jose,achieve,digoQue("Adios don Jose")); .abolish(Percepts[source(jose)]);.abolish(Percepts[source(clara)]).
-
-+!queja("Dame un caramelo").
-+!queja("Quiero un helado").
-+!queja("Quiero ir al parque").
 
 /* Plans */
 
++!digoQue(Frase)[source(Sender)] : answer(Sender,Frase,Answer) & .all_names(All) & .member(Sender,All)<-
+		.wait(1000);
+		.broadcast(achieve,digoQue(Answer)).
+
++!adios[source(jose)]: true <- 
+	.abolish(Percepts[source(jose)]).
+	
++!queja(Frase):true.
+
++!burla(Frase):true.

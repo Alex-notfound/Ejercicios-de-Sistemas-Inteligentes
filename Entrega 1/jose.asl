@@ -2,21 +2,46 @@
 
 /* Initial beliefs and rules */
 
+answer(pepe, "Hola don Jose", "Paso usted por mi casa?"):-
+	.print("Jose: Paso usted por mi casa?").
+answer(pepe, "Por su casa yo pase", "Vio usted a mi abuela?"):-
+	.print("Jose: Vio usted a mi abuela?").
+answer(pepe, "A su abuela yo la vi", "Adios don Pepito"):-
+	.print("Jose: Adios don Pepito.").
+answer(clara, "No me haces caso y se lo dire a mama", "Si que te estoy haciendo caso Clara"):- 
+	.print("Si que te estoy haciendo caso Clara").
+answer("Hola", "Buenas"):- 
+	.print("Buenas").
+
 /* Initial goals */
 
-!digoQue("Hola don Pepito").
-+!digoQue("Hola don Pepito") <- .print("Jose: Hola don Pepito"); .broadcast(achieve,digoQue("Hola don Pepito")).
-+!digoQue("Hola don Jose")<- .print("Jose: Paso usted por mi casa?"); .broadcast(achieve,digoQue("Paso usted por mi casa?")).
-+!digoQue("Por su casa yo pase")<- .print("Jose: Vio usted a mi abuela?"); .broadcast(achieve,digoQue("Vio usted a mi abuela?")).
-+!digoQue("A su abuela yo la vi")<- .print("Jose: Adios don Pepito"); .broadcast(achieve,digoQue("Adios don Pepito")).
-
-+!queja("Dame un caramelo").
-+!queja("Quiero un helado").
-+!queja("Quiero ir al parque") <- .print("Jose: Ya vamos Clara"); .send(clara,achieve,digoQue("Ya vamos Clara")).
-+!digoQue("Adios don Jose").
-+!digoQue("Por fin!!") <- .abolish(Percepts[source(pepe)]);.abolish(Percepts[source(clara)]).
-
+!start.
 
 /* Plans */
 
++!start : .all_names(All) & .member(pepe,All) <-
+	.print("Jose: Hola don Pepito");
+	.broadcast(achieve, digoQue("Hola don Pepito")).
+	
++!start <-
+	.print("Hola a todos.").
 
++!digoQue(Frase)[source(Sender)] 
+	: answer(Sender, Frase, Answer) & .all_names(All) & .member(Sender,All)<-
+		.broadcast(achieve,digoQue(Answer)).
+		
++!digoQue("Adios don Jose")[source(pepe)]: .all_names(All) & .member(pepe,All) <-
+	.send(pepe,achieve,adios);
+	.abolish(Percepts[source(pepe)]).
+	
++!digoQue("Hola")[source(Sender)] : answer("Hola", Answer)& .all_names(All) & .member(Sender,All) <- 
+	.broadcast(achieve, digoQue(Answer)).  
+
++!digoQue(Frase):true.
+
+//Se obtiene aleatoriamente un 0 o un 1 y en caso de ser este ultimo, procede a hacerle caso a Clara
++!queja(Frase)[source(Sender)]: math.round(math.random(1))==1 &answer(Sender, Frase, Answer) & .all_names(All) & .member(Sender,All) <- .send(Sender,achieve,digoQue(Answer)).
+
++!queja(Frase):true.
+
++!burla(Frase):true.

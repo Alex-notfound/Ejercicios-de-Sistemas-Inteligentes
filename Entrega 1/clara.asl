@@ -1,13 +1,32 @@
-// Agent Pepe in project GreetingSimple.mas2j
+// Agent clara in project GreetingSimple.mas2j
 
 /* Initial beliefs and rules */
 
+queja("Tio estoy cansada, vamonos ...").
+queja("Tengo hambre y quiero un helado").
+queja("No me haces caso y se lo dire a mama").
+	
+burla("Brlllllll ...").
+burla("Cara mapache dejanos en paz").
+burla("Gaznapiro, bocachancla, callate .....").
+
+answer(jose, "Si que te estoy haciendo caso Clara", "Asi me gusta"):-
+	.print("Asi me gusta").
+	
 /* Initial goals */
 
-+!digoQue("Hola don Pepito") <- .print("Clara: Dame un caramelo"); .broadcast(achieve,queja("Dame un caramelo")).
-+!digoQue("Paso usted por mi casa?") <- .print("Clara: Quiero un helado"); .broadcast(achieve,queja("Quiero un helado")).
-+!digoQue("Vio usted a mi abuela?").
-+!digoQue("Adios don Pepito") <-  .print("Clara: Quiero ir al parque"); .broadcast(achieve,queja("Quiero ir al parque")).
-+!digoQue("Ya vamos Clara") <- .print("Clara: Por fin!!"); .send(jose,achieve,digoQue("Por fin!!")); .abolish(Percepts[source(jose)]);.abolish(Percepts[source(pepe)]).
-
 /* Plans */
+
++!digoQue(Frase)[source(Sender)] 
+	: answer(Sender, Frase, Answer) & .all_names(All) & .member(Sender,All) <-
+		.send(Sender,achieve,digoQue(Answer)).
+
++!digoQue(Frase) : .all_names(Agents) & .member(jose,Agents) & queja(Q) 
+	<- .print(Q);.broadcast(achieve,queja(Q));  -queja(Q).
+
++!digoQue(Frase) : .count(queja(_),0) & .all_names(Agents) & .member(jose,Agents) & burla(B) 
+	<- .print(B);.broadcast(achieve,burla(B));  -burla(B); !interrupt.
+	
++!digoQue(Frase):true.
+
++!interrupt: .all_names(Agents) <- .abolish(Percepts[Agents]).
