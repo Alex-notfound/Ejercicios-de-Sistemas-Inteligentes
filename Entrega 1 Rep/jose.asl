@@ -39,7 +39,8 @@ answer("Hola", "Buenas"):-
 
 +!digoQue(Frase):true.
 
-+!queja(Frase)[source(Sender)]: answer(Sender, Frase, Answer) & .all_names(All) & .member(Sender,All) <- .send(Sender,achieve,digoQue(Answer)).
+//Se obtiene aleatoriamente un 0 o un 1 y en caso de ser este ultimo, procede a hacerle caso a Clara
++!queja(Frase)[source(Sender)]: math.round(math.random(1))==1 &answer(Sender, Frase, Answer) & .all_names(All) & .member(Sender,All) <- .send(Sender,achieve,digoQue(Answer)).
 
 +!queja(Frase):true.
 
