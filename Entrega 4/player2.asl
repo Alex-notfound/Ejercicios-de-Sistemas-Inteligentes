@@ -1,13 +1,13 @@
-// Agent player2 in project ET4.mas2j
-
-/* Initial beliefs and rules */
-
-/* Initial goals */
-
-!start.
-
-/* Plans */
-
+/* Initial beliefs and rules */
+
+
+
+/* Initial goals */
+
+!start.
+
+/* Plans */
+
 +!start <-.wait(turno(player2)); !jugar.
 
 +!jugar : estrategia(jugarAGanar) & tablero(X,Y,0) <- .print("X: ", X," Y: ",Y," V: ",V);put(X,Y);!start.
