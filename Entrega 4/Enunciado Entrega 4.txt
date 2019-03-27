@@ -1,0 +1,43 @@
+ENUNCIADO ENTREGA 4
+
+Para abordar la competición (que se realizará simultaneamente a la corrección) se subirán las entregas a la zona común de cada grupo reducido (en el caso de alumnos no presenciales al grupo que se les ha creado) y se procederá a publicar el código y el resultado de las pruebas.
+
+Todas las entregas deberán emplear el entorno que se ha publicado en la carpeta Laboratorio dentro de Documentos. Y que propone una visualización del tablero tal como sigue:
+
+Tablero
+
+La práctica consiste en desarrollar un SMA capaz de jugar a las cuatro en raya.
+
+Se podrán desarollar tantos agentes como se precisen para aplicar la(s) estrategia(s) de juego en cada modo de juego:
+jugarAGanar : En este modo el SMA debe intentar conseguir 4 en raya antes que su oponente
+jugarAPerder : En este modo el SMA debe intentar que su oponente consiga 4 en raya antes que él
+
+El nombre de los agentes (según la elección) que se comuniquen con el entorno será: player, player1 o player2
+
+El tablero proporcionará a los agentes las siguientes percepciones:
+
++estrategia(jugarAGanar) ó estrategia(jugarAPerder) que determinan el modo de jugo activo
++turno(Player) que indica a los jugadores que jugador (player1 o player2) debe realizar el siguiente movimiento.
++tablero(X,Y,Player) que indica para cada celda si esta libre (Player=0) o si esta ocupada por una ficha de algun jugador (Player=1 o Player=2)
+
+Los agentes se comunicarán con el tablero (de dimensión 8x8) mediante ordenes de la forma put(X,Y)
+
+El tablero se encarga de verificar las peticiones recibidas proclamando el ganador de cada partida:
+Si un agente ha conseguido completar su objetivo antes que el oponente
+
+Si un agente solo ha realizado movimientos válidos y el otro ha realizado un movimiento ilegal. Se consideran movimientos ilegales:
+
+Mover dos veces seguidas
+Mover fuera del tablero
+Mover encima de una ficha
+
+El tablero se encarga de controlar cada competición entre dos agentes dados. La competición se desarrolla haciendo que compitan dos SMA (player1 y player2) jugando de manera alterna como primer y segundo jugador un numero N de partidas en modo a ganar. En caso de empate se jugarán M partidas en modo a perder.
+
+Se realizarán competiciones entre los agentes desarrollados en cada grupo reducido y se otorgarán puntuación extra por la victoria dentro del grupo reducido. El modo de competición será tipo liga (todos contra todos actuando cada agente como primer y segundo jugador segun sorteo)
+Los ganadores de cada grupo reducido competirán entre sí con objeto de encontrar al ganador final. En este caso se produciran enfrentamientos en dos grupos:
+Grupo A: SI-6, SI-3, SI-1 y NP
+Grupo B: SI-5, SI-4, SI-2
+  y habrá una final entre los ganadores de cada grupo.
+
+En caso de empate, este se decidirá en favor del código más legible y corto.
+El tablero será el que se ha puesto disponible y no admite modificaciones.
