@@ -25,6 +25,11 @@ raya([0,0,0,16],X) :- X=0.
 
 raya([0,0,0,0],X) :- X=1.
 
+raya([17,17,17,0],X) :- X=3.
+raya([0,17,17,17],X) :- X=0.
+raya([17,17,0,17],X) :- X=2.
+raya([17,0,17,17],X) :- X=1.
+
 /* Initial goals */
 
 !start.
@@ -54,35 +59,33 @@ raya([0,0,0,0],X) :- X=1.
 		tablero(X,Y,1
 	}.
 */
+
 /*
 +!buscar4enRaya2(Jugador) : tablero(L) <- 
-	//Pos. horizontal
-	X=0;
+	N=4;
 	.length(L,length);
-	//Se obtiene la raya a analizar y se analiza
-	for(.range(I,1,16)){
-		.delete(I*4,length,L,Raya);
-		raya(Raya);
-	}
 	
-	acumRayaActual=0;
-	//Recorre tablero
-	for(.member(Q,L)){
-		if(Q==Jugador){
-			.concat(Raya,Q);
-			acumRayaActual=acumRayaActual+1;
-		}else{
-			if(acumRayaActual==3 && Q==0){
-				Y=Q/7;
-				X=(Q mod 7)-1;
-				break;
-			}
-			acumRayaActual=0;
-		}												
-}.
-
+	//Se obtiene la raya a analizar y se analiza
+	for(.range(I,0,64)){
+		//Descarta las casillas ya evaluadas
+		.delete(0,I,L,Tablero)
+		//Descarta las casillas que se evaluaran posteriormente
+		.delete(I+4,length,Tablero,Raya);
+		raya(Raya,Solucion);
+		
+		if(Solucion==3){
+			//Implementar que devuelva la posicion para colocar la ficha que otorga la victoria
+		}elif(Solucion==2 | Solucion==1){
+			//mejorJugada=Almacenar la jugada si es la mejor hasta el momento
+		}
+		
+		//Si se ha evaluado toda la linea horizontal actual, se salta a la siguiente
+		if((I+4) mod 8 == 0){
+			I=I+4;	
+		}
+	}.
 */
-
+	
 +!jugar : estrategia(jugarAPerder) & tablero(X,Y,V) <- put(X,Y); !start.
 
 //Plan por defecto para otros casos, de este modo se trata de evitar ser engañado.

@@ -1,34 +1,46 @@
 /* Initial beliefs and rules */
 
-//tablero(X,Y,Estado).
 estudiarJugada(X,Y):- 
 recorridoVertical(X,0).
 
 recorridoVertical(X,Y) :-
 tablero(X,Y,1) & Y=Y+1 & recorridoVertical(X,Y,S).
 
-raya([16,16,16,0],X) :- X=3.
-raya([0,16,16,16],X) :- X=0.
-raya([16,16,0,16],X) :- X=2.
-raya([16,0,16,16],X) :- X=1.
+raya([16,16,16,0],X,P) :- .print("Entra en zona ganadora") & P=1 & X=3.
+raya([0,16,16,16],X,P) :- .print("Entra en zona ganadora") & P=1 & X=0.
+raya([16,16,0,16],X,P) :- .print("Entra en zona ganadora") & P=1 & X=2.
+raya([16,0,16,16],X,P) :- .print("Entra en zona ganadora") & P=1 & X=1.
 
-raya([16,16,0,0],X) :- X=3.
-raya([0,16,16,0],X) :- X=0.
-raya([0,0,16,16],X) :- X=0.
-raya([0,16,0,16],X) :- X=0.
-raya([16,0,16,0],X) :- X=1.
+raya([16,16,0,0],X,P) :- P=3 & X=3.
+raya([0,16,16,0],X,P) :- P=3 & X=0.
+raya([0,0,16,16],X,P) :- P=3 & X=0.
+raya([0,16,0,16],X,P) :- P=3 & X=0.
+raya([16,0,16,0],X,P) :- P=3 & X=1.
 
-raya([16,0,0,0],X) :- X=3.
-raya([0,16,0,0],X) :- X=3.
-raya([0,0,16,0],X) :- X=0.
-raya([0,0,0,16],X) :- X=0.
+raya([16,0,0,0],X,P) :- P=10 & X=3.
+raya([0,16,0,0],X,P) :- P=10 & X=3.
+raya([0,0,16,0],X,P) :- P=10 & X=0.
+raya([0,0,0,16],X,P) :- P=10 & X=0.
 
-raya([0,0,0,0],X) :- X=1.
+raya([0,0,0,0],X,P) :- P=100 & X=1.
 
-raya([17,17,17,0],X) :- X=3.
-raya([0,17,17,17],X) :- X=0.
-raya([17,17,0,17],X) :- X=2.
-raya([17,0,17,17],X) :- X=1.
+raya([17,17,17,0],X,P) :- P=2 & X=3.
+raya([0,17,17,17],X,P) :- P=2 & X=0.
+raya([17,17,0,17],X,P) :- P=2 & X=2.
+raya([17,0,17,17],X,P) :- P=2 & X=1.
+
+raya([17,17,0,0],X,P) :- P=4 & X=3.
+raya([0,17,17,0],X,P) :- P=4 & X=0.
+raya([0,0,17,17],X,P) :- P=4 & X=0.
+raya([0,17,0,17],X,P) :- P=4 & X=0.
+raya([17,0,17,0],X,P) :- P=4 & X=1.
+
+raya([17,0,0,0],X,P) :- P=20 & X=3.
+raya([0,17,0,0],X,P) :- P=20 & X=3.
+raya([0,0,17,0],X,P) :- P=20 & X=0.
+raya([0,0,0,17],X,P) :- P=20 & X=0.
+
+raya([_,_,_,_],X,P) :- P=1000 & X=0.
 
 /* Initial goals */
 
@@ -38,55 +50,40 @@ raya([17,0,17,17],X) :- X=1.
 
 +!start <-.wait(turno(player1)); !jugar.
 
-+!jugar : estrategia(jugarAGanar) & tablero(X,Y,0) <- put(X,Y); !start.
-/*
-+!buscar4enRaya <- 
-	for(.range(X,0,7)){
-		for(.range(Y,0,7)){
-			tablero(X,Y,Z);
-			if(Z==1){
-				estudiarJugada(X,Y);
-			}
-			elif(Z==2){
-			}
-			else{
-			}
-		}
-}.
+//+!jugar : estrategia(jugarAGanar) & tablero(X,Y,0) <- put(X,Y); !start.
 
-+!recorrerVerticalmente(X) <- 
-	for(.range(Y,0,7)){
-		tablero(X,Y,1
-	}.
-*/
++!jugar : estrategia(jugarAGanar) & tablero([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]) & tablero(X,Y,0) <- put(X,Y); !start.
 
-/*
-+!buscar4enRaya2(Jugador) : tablero(L) <- 
-	N=4;
-	.length(L,length);
-	
++!jugar : estrategia(jugarAGanar) <- !buscar4enRaya; .print("FIN");!start.
+
++!buscar4enRaya : tablero(L) <-
+	//.print("Lista: ", L);
+	.length(L, Tam);
 	//Se obtiene la raya a analizar y se analiza
-	for(.range(I,0,64)){
+	for( .range(Num,0,60)){
+		PosicionHorizontal = (Num mod 8);
 		//Descarta las casillas ya evaluadas
-		.delete(0,I,L,Tablero)
+		.delete(0,Num,L,Tablero);
 		//Descarta las casillas que se evaluaran posteriormente
-		.delete(I+4,length,Tablero,Raya);
-		raya(Raya,Solucion);
-		
-		if(Solucion==3){
+		.delete(4,Tam,Tablero,Raya);
+		.print("Raya: ", Raya);
+		?raya(Raya,Solucion,P);		
+		if(P==1){
 			//Implementar que devuelva la posicion para colocar la ficha que otorga la victoria
-		}elif(Solucion==2 | Solucion==1){
-			//mejorJugada=Almacenar la jugada si es la mejor hasta el momento
+			.print("Voy a ganar");
+			put(PosicionHorizontal,Num/8);
 		}
-		
 		//Si se ha evaluado toda la linea horizontal actual, se salta a la siguiente
-		if((I+4) mod 8 == 0){
-			I=I+4;	
+		if((Posicion+4) mod 8 == 0){
+			PosicionHorizontal=PosicionHorizontal+4;
+			.print("NExt");
 		}
-	}.
-*/
-	
+		.print("Eje X: ", PosicionHorizontal, " y Numero: ", Num);	
+	}
+	?tablero(X,Y,0);
+	put(X,Y).
+			
 +!jugar : estrategia(jugarAPerder) & tablero(X,Y,V) <- put(X,Y); !start.
 
 //Plan por defecto para otros casos, de este modo se trata de evitar ser engañado.
-+Default[source(A)]: not A=self <- .print("Ignoro al agente ", A).
++Default[source(A)]: not A=self & not A=percept <- .print("Ignoro al agente ", A).
