@@ -42,6 +42,8 @@ raya([0,0,0,17],X,P) :- P=20 & X=0.
 
 raya([_,_,_,_],X,P) :- P=1000 & X=0.
 
+prioridad(PM,P,PM) :- PM<P.
+prioridad(PM,P,P) :- PM>=P.
 /* Initial goals */
 
 !start.
@@ -56,32 +58,38 @@ raya([_,_,_,_],X,P) :- P=1000 & X=0.
 
 +!jugar : estrategia(jugarAGanar) <- !buscar4enRaya; .print("FIN");!start.
 
-+!buscar4enRaya : tablero(L) <-
-	//.print("Lista: ", L);
++!buscar4enRaya : tablero(L)<-
 	.length(L, Tam);
 	//Se obtiene la raya a analizar y se analiza
-	for( .range(Num,0,60)){
+	for( .range(Num,0,64)){
 		PosicionHorizontal = (Num mod 8);
 		//Descarta las casillas ya evaluadas
-		.delete(0,Num,L,Tablero);
+		if(Num<60){.delete(0,Num,L,Tablero);}
+		else{.delete(0,60,L,Tablero);}
 		//Descarta las casillas que se evaluaran posteriormente
 		.delete(4,Tam,Tablero,Raya);
 		.print("Raya: ", Raya);
 		?raya(Raya,Solucion,P);		
 		if(P==1){
-			//Implementar que devuelva la posicion para colocar la ficha que otorga la victoria
 			.print("Voy a ganar");
-			put(PosicionHorizontal,Num/8);
+			put(PosicionHorizontal+Solucion,Num/8);
 		}
-		//Si se ha evaluado toda la linea horizontal actual, se salta a la siguiente
-		if((Posicion+4) mod 8 == 0){
-			PosicionHorizontal=PosicionHorizontal+4;
-			.print("NExt");
+		?prioridad(PrioridadMayor,P,NuevaPrioridad);
+		if(NuevaPrioridad==P){
+			PrioridadMayor=P;
+			.print("Nueva prioridad: ", PrioridadMayor);
+			X=PosicionHorizontal+Solucion;
+			Y=Num/8;
 		}
-		.print("Eje X: ", PosicionHorizontal, " y Numero: ", Num);	
+		//.print("Eje X: ", PosicionHorizontal, " y Numero: ", Num);	
 	}
-	?tablero(X,Y,0);
-	put(X,Y).
+	if(PrioridadMayor<1000){
+		put(X,Y);
+	}
+	else{
+		?tablero(Q,W,0);
+		put(Q,W)
+	}.
 			
 +!jugar : estrategia(jugarAPerder) & tablero(X,Y,V) <- put(X,Y); !start.
 
