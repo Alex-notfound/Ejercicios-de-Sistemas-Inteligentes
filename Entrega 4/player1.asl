@@ -60,6 +60,7 @@ raya([17,0,17,17],X) :- X=1.
 	}.
 */
 
+/*
 +!buscar4enRaya2(Jugador) : tablero(L) <- 
 	N=4;
 	.length(L,length);
@@ -83,7 +84,8 @@ raya([17,0,17,17],X) :- X=1.
 			I=I+4;	
 		}
 	}.
-
+*/
+	
 +!jugar : estrategia(jugarAPerder) & tablero(X,Y,V) <- put(X,Y); !start.
 
 //Plan por defecto para otros casos, de este modo se trata de evitar ser engañado.
