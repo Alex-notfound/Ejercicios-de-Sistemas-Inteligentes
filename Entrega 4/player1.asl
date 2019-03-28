@@ -54,15 +54,16 @@ raya([0,0,0,0],X) :- X=1.
 		tablero(X,Y,1
 	}.
 */
-
+/*
 +!buscar4enRaya2(Jugador) : tablero(L) <- 
 	//Pos. horizontal
 	X=0;
-	//Se obtiene la raya a analizar
 	.length(L,length);
-	.delete(4,length,L,Raya);
-	raya(Raya);
-	
+	//Se obtiene la raya a analizar y se analiza
+	for(.range(I,1,16)){
+		.delete(I*4,length,L,Raya);
+		raya(Raya);
+	}
 	
 	acumRayaActual=0;
 	//Recorre tablero
@@ -80,6 +81,7 @@ raya([0,0,0,0],X) :- X=1.
 		}												
 }.
 
+*/
 
 +!jugar : estrategia(jugarAPerder) & tablero(X,Y,V) <- put(X,Y); !start.
 
