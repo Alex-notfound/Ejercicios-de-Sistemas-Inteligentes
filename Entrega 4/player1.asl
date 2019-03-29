@@ -31,6 +31,7 @@ raya([0,17,17,0],X,P) :- P=4 & X=0.
 raya([0,0,17,17],X,P) :- P=4 & X=0.
 raya([0,17,0,17],X,P) :- P=4 & X=0.
 raya([17,0,17,0],X,P) :- P=4 & X=1.
+raya([17,0,0,17],X,P) :- P=4 & X=1.
 
 raya([17,0,0,0],X,P) :- P=20 & X=3.
 raya([0,17,0,0],X,P) :- P=20 & X=3.
@@ -51,29 +52,48 @@ raya(L,X,P) :- P=1500 & X=0.
 
 +!jugar : estrategia(jugarAGanar) <- !buscar4enRaya; .print("FIN");!start.
 
-+!buscar4enRaya : tablero(L) <-
++!buscar4enRaya <-
+	
+	!estrategiaHorizontal;
+	!estrategiaVertical;
+	?prioridad(PF);
+	if(PF<1000){
+		?x(X);
+		?y(Y);
+		put(X,Y);
+	}
+	else{
+		?tablero(Q,W,0);
+		put(Q,W)
+	}
+	-+prioridad(2000).
+
++!estrategiaHorizontal : tablero(L) <-
 	.length(L, Tam);
-	//Se obtiene la raya a analizar y se analiza
-	for( .range(Num,0,60)){
+	for(.range(Num,0,60)){
 		PosicionHorizontal = Num mod 8;
-		.print("X es ", PosicionHorizontal);
 		//Descarta las casillas ya evaluadas
 		if(PosicionHorizontal<5){
 			.delete(0,Num,L,Tablero);
 			//Descarta las casillas que se evaluaran posteriormente
 			.delete(4,Tam,Tablero,Raya);
 			.print("Raya: ", Raya);
-			?raya(Raya,Solucion,P);		
+			//Analiza la raya obtenida
+			?raya(Raya,Solucion,P);	
+			//Si P de prioridad es 1, coloca para ganar
 			if(P==1){
 				.print("Voy a ganar con PH: ", PosicionHorizontal);
+				//Si la posicion actual esta en la mitad derecha del tablero, coloca a partir de 4 en la posicion correcta
 				if(PosicionHorizontal mod 8 > 3){
 					put(4+Solucion,Num/8);
+				//Si no, coloca a partir de la posicion actual
 				}else{
 					put(PosicionHorizontal+Solucion,Num/8);
 				}
 			}
-			
+			//Obtiene la mayor prioridad almacenada hasta el momento
 			?prioridad(PM);
+			//Si la prioridad es menor que la almacenada hasta el momento, la actualiza y almacena los nuevos valores de X e Y
 			if(P<PM){
 				.print("P es ", P, " y PM es ", PM);
 				-+prioridad(P);
@@ -90,17 +110,41 @@ raya(L,X,P) :- P=1500 & X=0.
 			}
 		}
 	}
-	?prioridad(PF);
-	if(PF<1000){
-		?x(X);
-		?y(Y);
-		put(X,Y);
+.
+
++!estrategiaVertical : tablero(L) <-
+	.length(L, Tam);
+	for(.range(Num,0,39)){
+		PosicionVertical = Num div 8;
+		//Descarta las casillas ya evaluadas
+		.delete(0,Num,L,Tablero);
+		.delete(1,8,Tablero,Tablero2);
+		.print("T2: ", Tablero2);
+		.delete(2,9,Tablero2,Tablero3);
+		.print("T3: ",Tablero3);
+		.delete(3,10,Tablero3,Tablero4);
+		.print(Tablero4);
+		//Descarta las casillas que se evaluaran posteriormente
+		.delete(4,Tam,Tablero4,Raya);
+		.print("Raya: ", Raya);
+		?raya(Raya,Solucion,P);		
+		if(P==1){
+			.print("Voy a ganar con PV: ", PosicionVertical+Solucion);
+			put(Num mod 8,PosicionVertical+Solucion);
+		}
+			
+		?prioridad(PM);
+		if(P<PM){
+			.print("P es ", P, " y PM es ", PM);
+			-+prioridad(P);
+			X=Num mod 8;
+			-+x(X);
+			Y=PosicionVertical+Solucion;
+			-+y(Y);
+			.print("[",X,",",Y,"]");
+		}
 	}
-	else{
-		?tablero(Q,W,0);
-		put(Q,W)
-	}
-	-+prioridad(2000).
+.
 			
 +!jugar : estrategia(jugarAPerder) & tablero(X,Y,V) <- put(X,Y); !start.
 
