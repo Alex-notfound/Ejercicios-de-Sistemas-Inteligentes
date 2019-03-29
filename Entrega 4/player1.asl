@@ -64,14 +64,23 @@ raya([_,_,_,_],X,P) :- P=1000 & X=0.
 		.print("Raya: ", Raya);
 		?raya(Raya,Solucion,P);		
 		if(P==1){
-			.print("Voy a ganar");
-			put(PosicionHorizontal+Solucion,Num/8);
+			.print("Voy a ganar con PH: ", PosicionHorizontal);
+			
+			if(PosicionHorizontal mod 8 > 3){
+				put(4+Solucion,Num/8);
+			}else{
+				put(PosicionHorizontal+Solucion,Num/8);
+			}
 		}
 		?prioridad(PM);
 		if(P<PM){
 			.print("P es ", P, " y PM es ", PM);
 			-+prioridad(P);
-			X=PosicionHorizontal+Solucion;
+			if(PosicionHorizontal mod 8 > 3){
+				X=4+Solucion;
+			}else{
+				X=PosicionHorizontal+Solucion;
+			}
 			-+x(X);
 			Div=Num/8;
 			Y=Div mod 10;
