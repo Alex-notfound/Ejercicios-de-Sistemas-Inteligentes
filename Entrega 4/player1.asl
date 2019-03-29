@@ -86,7 +86,7 @@ raya(L,X,P) :- P=1500 & X=0.
 				//Si la posicion actual esta en la mitad derecha del tablero, coloca a partir de 4 en la posicion correcta
 				if(PosicionHorizontal mod 8 > 3){
 					put(4+Solucion,Num/8);
-				//Si no, coloca a partir de la posicion actual
+				//Si no, coloca a partir de la posicion actual en la correcta
 				}else{
 					put(PosicionHorizontal+Solucion,Num/8);
 				}
@@ -96,15 +96,20 @@ raya(L,X,P) :- P=1500 & X=0.
 			//Si la prioridad es menor que la almacenada hasta el momento, la actualiza y almacena los nuevos valores de X e Y
 			if(P<PM){
 				.print("P es ", P, " y PM es ", PM);
+				//Actualiza la prioridad
 				-+prioridad(P);
+				//Si la posicion actual esta en la mitad derecha del tablero, coloca a partir de 4 en la posicion correcta
 				if(PosicionHorizontal mod 8 > 3){
 					X=4+Solucion;
+				//Si no, coloca a partir de la posicion actual en la correcta
 				}else{
 					X=PosicionHorizontal+Solucion;
 				}
+				//Actualiza X
 				-+x(X);
-				Div=Num/8;
-				Y=Div mod 10;
+				//Se calcula Y
+				Y=Num div 8;
+				//Actualiza Y
 				-+y(Y);
 				.print("[",X,",",Y,"]");
 			}
