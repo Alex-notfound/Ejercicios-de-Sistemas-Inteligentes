@@ -37,7 +37,7 @@ raya([0,17,0,0],X,P) :- P=20 & X=3.
 raya([0,0,17,0],X,P) :- P=20 & X=0.
 raya([0,0,0,17],X,P) :- P=20 & X=0.
 
-raya([_,_,_,_],X,P) :- P=1000 & X=0.
+raya(L,X,P) :- P=1500 & X=0.
 
 /* Initial goals */
 
@@ -54,38 +54,40 @@ raya([_,_,_,_],X,P) :- P=1000 & X=0.
 +!buscar4enRaya : tablero(L) <-
 	.length(L, Tam);
 	//Se obtiene la raya a analizar y se analiza
-	for( .range(Num,0,64)){
-		PosicionHorizontal = (Num mod 8);
+	for( .range(Num,0,60)){
+		PosicionHorizontal = Num mod 8;
+		.print("X es ", PosicionHorizontal);
 		//Descarta las casillas ya evaluadas
-		if(Num<60){.delete(0,Num,L,Tablero);}
-		else{.delete(0,60,L,Tablero);}
-		//Descarta las casillas que se evaluaran posteriormente
-		.delete(4,Tam,Tablero,Raya);
-		.print("Raya: ", Raya);
-		?raya(Raya,Solucion,P);		
-		if(P==1){
-			.print("Voy a ganar con PH: ", PosicionHorizontal);
+		if(PosicionHorizontal<5){
+			.delete(0,Num,L,Tablero);
+			//Descarta las casillas que se evaluaran posteriormente
+			.delete(4,Tam,Tablero,Raya);
+			.print("Raya: ", Raya);
+			?raya(Raya,Solucion,P);		
+			if(P==1){
+				.print("Voy a ganar con PH: ", PosicionHorizontal);
+				if(PosicionHorizontal mod 8 > 3){
+					put(4+Solucion,Num/8);
+				}else{
+					put(PosicionHorizontal+Solucion,Num/8);
+				}
+			}
 			
-			if(PosicionHorizontal mod 8 > 3){
-				put(4+Solucion,Num/8);
-			}else{
-				put(PosicionHorizontal+Solucion,Num/8);
+			?prioridad(PM);
+			if(P<PM){
+				.print("P es ", P, " y PM es ", PM);
+				-+prioridad(P);
+				if(PosicionHorizontal mod 8 > 3){
+					X=4+Solucion;
+				}else{
+					X=PosicionHorizontal+Solucion;
+				}
+				-+x(X);
+				Div=Num/8;
+				Y=Div mod 10;
+				-+y(Y);
+				.print("[",X,",",Y,"]");
 			}
-		}
-		?prioridad(PM);
-		if(P<PM){
-			.print("P es ", P, " y PM es ", PM);
-			-+prioridad(P);
-			if(PosicionHorizontal mod 8 > 3){
-				X=4+Solucion;
-			}else{
-				X=PosicionHorizontal+Solucion;
-			}
-			-+x(X);
-			Div=Num/8;
-			Y=Div mod 10;
-			-+y(Y);
-			.print("[",X,",",Y,"]");
 		}
 	}
 	?prioridad(PF);
