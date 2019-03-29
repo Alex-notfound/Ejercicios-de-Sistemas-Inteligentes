@@ -1,5 +1,7 @@
 /* Initial beliefs and rules */
 
+prioridad(2000).
+
 estudiarJugada(X,Y):- 
 recorridoVertical(X,0).
 
@@ -16,6 +18,7 @@ raya([0,16,16,0],X,P) :- P=3 & X=0.
 raya([0,0,16,16],X,P) :- P=3 & X=0.
 raya([0,16,0,16],X,P) :- P=3 & X=0.
 raya([16,0,16,0],X,P) :- P=3 & X=1.
+raya([16,0,0,16],X,P) :- P=3 & X=2.
 
 raya([16,0,0,0],X,P) :- P=10 & X=3.
 raya([0,16,0,0],X,P) :- P=10 & X=3.
@@ -42,8 +45,13 @@ raya([0,0,0,17],X,P) :- P=20 & X=0.
 
 raya([_,_,_,_],X,P) :- P=1000 & X=0.
 
-prioridad(PM,P,PM) :- PM<P.
-prioridad(PM,P,P) :- PM>=P.
+/*
+prioridad(PM,P,PM) :- PM<=P & .print("2 priority: ", PM) .
+prioridad(PM,P,P) :- PM>P & .print("3 priority: ", P).
+
+cambiarPrioridad(PrioridadMayor,NuevaPrioridad):- PrioridadMayor=NuevaPrioridad.
+*/
+
 /* Initial goals */
 
 !start.
@@ -58,7 +66,7 @@ prioridad(PM,P,P) :- PM>=P.
 
 +!jugar : estrategia(jugarAGanar) <- !buscar4enRaya; .print("FIN");!start.
 
-+!buscar4enRaya : tablero(L)<-
++!buscar4enRaya : tablero(L) <-
 	.length(L, Tam);
 	//Se obtiene la raya a analizar y se analiza
 	for( .range(Num,0,64)){
@@ -74,22 +82,30 @@ prioridad(PM,P,P) :- PM>=P.
 			.print("Voy a ganar");
 			put(PosicionHorizontal+Solucion,Num/8);
 		}
-		?prioridad(PrioridadMayor,P,NuevaPrioridad);
-		if(NuevaPrioridad==P){
-			PrioridadMayor=P;
-			.print("Nueva prioridad: ", PrioridadMayor);
+		?prioridad(PM);
+		if(P<PM){
+			.print("P es ", P, " y PM es ", PM);
+			-+prioridad(P);
 			X=PosicionHorizontal+Solucion;
-			Y=Num/8;
+			-+x(X);
+			Div=Num/8;
+			Y=Div mod 10;
+			-+y(Y);
+			.print("[",X,",",Y,"]");
 		}
 		//.print("Eje X: ", PosicionHorizontal, " y Numero: ", Num);	
 	}
-	if(PrioridadMayor<1000){
+	?prioridad(PF);
+	if(PF<1000){
+		?x(X);
+		?y(Y);
 		put(X,Y);
 	}
 	else{
 		?tablero(Q,W,0);
 		put(Q,W)
-	}.
+	}
+	-+prioridad(2000).
 			
 +!jugar : estrategia(jugarAPerder) & tablero(X,Y,V) <- put(X,Y); !start.
 
