@@ -76,7 +76,6 @@ raya(L,X,P) :- P=1500 & X=0.
 			.delete(0,Num,L,Tablero);
 			//Descarta las casillas que se evaluaran posteriormente
 			.delete(4,Tam,Tablero,Raya);
-			.print("Raya: ", Raya);
 			//Analiza la raya obtenida
 			?raya(Raya,Solucion,P);	
 			//Si P de prioridad es 1, coloca para ganar
@@ -94,7 +93,6 @@ raya(L,X,P) :- P=1500 & X=0.
 			?prioridad(PM);
 			//Si la prioridad es menor que la almacenada hasta el momento, la actualiza y almacena los nuevos valores de X e Y
 			if(P<PM){
-				.print("P es ", P, " y PM es ", PM);
 				//Actualiza la prioridad
 				-+prioridad(P);
 				//Si la posicion actual esta en la mitad derecha del tablero, coloca a partir de 4 en la posicion correcta
@@ -110,7 +108,6 @@ raya(L,X,P) :- P=1500 & X=0.
 				Y=Num div 8;
 				//Actualiza Y
 				-+y(Y);
-				.print("[",X,",",Y,"]");
 			}
 		}
 	}
@@ -123,14 +120,10 @@ raya(L,X,P) :- P=1500 & X=0.
 		//Descarta las casillas ya evaluadas
 		.delete(0,Num,L,Tablero);
 		.delete(1,8,Tablero,Tablero2);
-		.print("T2: ", Tablero2);
 		.delete(2,9,Tablero2,Tablero3);
-		.print("T3: ",Tablero3);
 		.delete(3,10,Tablero3,Tablero4);
-		.print(Tablero4);
 		//Descarta las casillas que se evaluaran posteriormente
 		.delete(4,Tam,Tablero4,Raya);
-		.print("Raya: ", Raya);
 		?raya(Raya,Solucion,P);		
 		if(P==1){
 			.print("Voy a ganar con PV: ", PosicionVertical+Solucion);
@@ -139,13 +132,11 @@ raya(L,X,P) :- P=1500 & X=0.
 			
 		?prioridad(PM);
 		if(P<PM){
-			.print("P es ", P, " y PM es ", PM);
 			-+prioridad(P);
 			X=Num mod 8;
 			-+x(X);
 			Y=PosicionVertical+Solucion;
 			-+y(Y);
-			.print("[",X,",",Y,"]");
 		}
 	}
 .

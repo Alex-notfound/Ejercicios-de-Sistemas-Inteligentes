@@ -77,7 +77,6 @@ raya(L,X,P) :- P=1500 & X=0.
 			.delete(0,Num,L,Tablero);
 			//Descarta las casillas que se evaluaran posteriormente
 			.delete(4,Tam,Tablero,Raya);
-			.print("Raya: ", Raya);
 			//Analiza la raya obtenida
 			?raya(Raya,Solucion,P);	
 			//Si P de prioridad es 1, coloca para ganar
@@ -95,7 +94,6 @@ raya(L,X,P) :- P=1500 & X=0.
 			?prioridad(PM);
 			//Si la prioridad es menor que la almacenada hasta el momento, la actualiza y almacena los nuevos valores de X e Y
 			if(P<PM){
-				.print("P es ", P, " y PM es ", PM);
 				//Actualiza la prioridad
 				-+prioridad(P);
 				//Si la posicion actual esta en la mitad derecha del tablero, coloca a partir de 4 en la posicion correcta
@@ -111,13 +109,40 @@ raya(L,X,P) :- P=1500 & X=0.
 				Y=Num div 8;
 				//Actualiza Y
 				-+y(Y);
-				.print("[",X,",",Y,"]");
 			}
 		}
 	}
 .
 
 +!estrategiaVertical : tablero(L) <-
+	.length(L, Tam);
+	for(.range(Num,0,39)){
+		PosicionVertical = Num div 8;
+		//Descarta las casillas ya evaluadas
+		.delete(0,Num,L,Tablero);
+		.delete(1,8,Tablero,Tablero2);
+		.delete(2,9,Tablero2,Tablero3);
+		.delete(3,10,Tablero3,Tablero4);
+		//Descarta las casillas que se evaluaran posteriormente
+		.delete(4,Tam,Tablero4,Raya);
+		?raya(Raya,Solucion,P);		
+		if(P==1){
+			.print("Voy a ganar con PV: ", PosicionVertical+Solucion);
+			put(Num mod 8,PosicionVertical+Solucion);
+		}
+			
+		?prioridad(PM);
+		if(P<PM){
+			-+prioridad(P);
+			X=Num mod 8;
+			-+x(X);
+			Y=PosicionVertical+Solucion;
+			-+y(Y);
+		}
+	}
+.
+
++!estrategiaDiagonal : tablero(L) <-
 	.length(L, Tam);
 	for(.range(Num,0,39)){
 		PosicionVertical = Num div 8;
@@ -150,7 +175,7 @@ raya(L,X,P) :- P=1500 & X=0.
 		}
 	}
 .
-			
+
 +!jugar : estrategia(jugarAPerder) & tablero(X,Y,V) <- put(X,Y); !start.
 
 //Plan por defecto para otros casos, de este modo se trata de evitar ser engañado.
