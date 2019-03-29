@@ -2,16 +2,10 @@
 
 prioridad(2000).
 
-estudiarJugada(X,Y):- 
-recorridoVertical(X,0).
-
-recorridoVertical(X,Y) :-
-tablero(X,Y,1) & Y=Y+1 & recorridoVertical(X,Y,S).
-
-raya([16,16,16,0],X,P) :- .print("Entra en zona ganadora") & P=1 & X=3.
-raya([0,16,16,16],X,P) :- .print("Entra en zona ganadora") & P=1 & X=0.
-raya([16,16,0,16],X,P) :- .print("Entra en zona ganadora") & P=1 & X=2.
-raya([16,0,16,16],X,P) :- .print("Entra en zona ganadora") & P=1 & X=1.
+raya([16,16,16,0],X,P) :- P=1 & X=3.
+raya([0,16,16,16],X,P) :- P=1 & X=0.
+raya([16,16,0,16],X,P) :- P=1 & X=2.
+raya([16,0,16,16],X,P) :- P=1 & X=1.
 
 raya([16,16,0,0],X,P) :- P=3 & X=3.
 raya([0,16,16,0],X,P) :- P=3 & X=0.
@@ -45,13 +39,6 @@ raya([0,0,0,17],X,P) :- P=20 & X=0.
 
 raya([_,_,_,_],X,P) :- P=1000 & X=0.
 
-/*
-prioridad(PM,P,PM) :- PM<=P & .print("2 priority: ", PM) .
-prioridad(PM,P,P) :- PM>P & .print("3 priority: ", P).
-
-cambiarPrioridad(PrioridadMayor,NuevaPrioridad):- PrioridadMayor=NuevaPrioridad.
-*/
-
 /* Initial goals */
 
 !start.
@@ -59,8 +46,6 @@ cambiarPrioridad(PrioridadMayor,NuevaPrioridad):- PrioridadMayor=NuevaPrioridad.
 /* Plans */
 
 +!start <-.wait(turno(player1)); !jugar.
-
-//+!jugar : estrategia(jugarAGanar) & tablero(X,Y,0) <- put(X,Y); !start.
 
 +!jugar : estrategia(jugarAGanar) & tablero([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]) & tablero(X,Y,0) <- put(X,Y); !start.
 
@@ -93,7 +78,6 @@ cambiarPrioridad(PrioridadMayor,NuevaPrioridad):- PrioridadMayor=NuevaPrioridad.
 			-+y(Y);
 			.print("[",X,",",Y,"]");
 		}
-		//.print("Eje X: ", PosicionHorizontal, " y Numero: ", Num);	
 	}
 	?prioridad(PF);
 	if(PF<1000){
