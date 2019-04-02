@@ -127,9 +127,10 @@ raya(L,X,P) :- P=1500 & X=0.
 		.delete(3,10,Tablero3,Tablero4);
 		//Descarta las casillas que se evaluaran posteriormente
 		.delete(4,Tam,Tablero4,Raya);
+					.print("Raya: ", Raya);
 		?raya(Raya,Solucion,P);		
 		if(P==1){
-			.print("Voy a ganar con PV: ", PosicionVertical+Solucion);
+			.print("Voy a ganar con Num: ", Num, " PV: ", PosicionVertical+Solucion);
 			put(Num mod 8,PosicionVertical+Solucion);
 		}
 			
@@ -147,29 +148,31 @@ raya(L,X,P) :- P=1500 & X=0.
 +!estrategiaDiagonalIzq : tablero(L) <-
 	.length(L, Tam);
 	for(.range(Num,0,33)){
-		PosicionVertical = Num div 8;
-		//Descarta las casillas ya evaluadas
-		.delete(0,Num,L,Tablero);
-		.delete(1,9,Tablero,Tablero2);
-		.delete(2,10,Tablero2,Tablero3);
-		.delete(3,11,Tablero3,Tablero4);
-		//Descarta las casillas que se evaluaran posteriormente
-		.delete(4,Tam,Tablero4,Raya);
-		?raya(Raya,Solucion,P);		
-		if(P==1){
-			.print("Voy a ganar con PV: ", PosicionVertical+Solucion);
-			put((Num mod 8)+Solucion,PosicionVertical+Solucion);
-		}
-			
-		?prioridad(PM);
-		if(P<PM){
-			.print("P es ", P, " y PM es ", PM);
-			-+prioridad(P);
-			X=(Num mod 8)+Solucion;
-			-+x(X);
-			Y=PosicionVertical+Solucion;
-			-+y(Y);
-			.print("[",X,",",Y,"]");
+		if((Num mod 8) < 5){
+			PosicionVertical = Num div 8;
+			//Descarta las casillas ya evaluadas
+			.delete(0,Num,L,Tablero);
+			.delete(1,9,Tablero,Tablero2);
+			.delete(2,10,Tablero2,Tablero3);
+			.delete(3,11,Tablero3,Tablero4);
+			//Descarta las casillas que se evaluaran posteriormente
+			.delete(4,Tam,Tablero4,Raya);
+			?raya(Raya,Solucion,P);		
+			if(P==1){
+				.print("Voy a ganar con DIAGONAL IZQ, con Num: ", Num, " y solucion: ", Solucion);
+				put((Num mod 8)+Solucion,PosicionVertical+Solucion);
+			}
+				
+			?prioridad(PM);
+			if(P<PM){
+				.print("P es ", P, " y PM es ", PM);
+				-+prioridad(P);
+				X=(Num mod 8)+Solucion;
+				-+x(X);
+				Y=PosicionVertical+Solucion;
+				-+y(Y);
+				.print("[",X,",",Y,"]");
+			}
 		}
 	}
 .
@@ -177,29 +180,31 @@ raya(L,X,P) :- P=1500 & X=0.
 +!estrategiaDiagonalDer : tablero(L) <-
 	.length(L, Tam);
 	for(.range(Num,0,36)){
-		PosicionVertical = Num div 8;
-		//Descarta las casillas ya evaluadas
-		.delete(0,Num,L,Tablero);
-		.delete(1,8,Tablero,Tablero2);
-		.delete(2,9,Tablero2,Tablero3);
-		.delete(3,10,Tablero3,Tablero4);
-		//Descarta las casillas que se evaluaran posteriormente
-		.delete(4,Tam,Tablero4,Raya);
-		?raya(Raya,Solucion,P);		
-		if(P==1){
-			.print("Voy a ganar con DIAGONAL DERECHA: ", PosicionVertical+Solucion);
-			put((Num mod 8)+Solucion,PosicionVertical+Solucion);
-		}
-			
-		?prioridad(PM);
-		if(P<PM){
-			.print("P es ", P, " y PM es ", PM);
-			-+prioridad(P);
-			X=(Num mod 8)+Solucion;
-			-+x(X);
-			Y=PosicionVertical+Solucion;
-			-+y(Y);
-			.print("[",X,",",Y,"]");
+		if((Num mod 8) > 2){
+			PosicionVertical = Num div 8;
+			//Descarta las casillas ya evaluadas
+			.delete(0,Num,L,Tablero);
+			.delete(1,7,Tablero,Tablero2);
+			.delete(2,8,Tablero2,Tablero3);
+			.delete(3,9,Tablero3,Tablero4);
+			//Descarta las casillas que se evaluaran posteriormente
+			.delete(4,Tam,Tablero4,Raya);
+			?raya(Raya,Solucion,P);		
+			if(P==1){
+				.print("Voy a ganar con DIAGONAL DERECHA: ", PosicionVertical+Solucion);
+				put((Num mod 8)-Solucion,PosicionVertical+Solucion);
+			}
+				
+			?prioridad(PM);
+			if(P<PM){
+				//.print("P es ", P, " y PM es ", PM);
+				-+prioridad(P);
+				X=(Num mod 8)-Solucion;
+				-+x(X);
+				Y=PosicionVertical+Solucion;
+				-+y(Y);
+				.print("[",X,",",Y,"]");
+			}
 		}
 	}
 .
