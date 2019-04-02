@@ -151,14 +151,10 @@ raya(L,X,P) :- P=1500 & X=0.
 		//Descarta las casillas ya evaluadas
 		.delete(0,Num,L,Tablero);
 		.delete(1,9,Tablero,Tablero2);
-		//.print("T2: ", Tablero2);
 		.delete(2,10,Tablero2,Tablero3);
-		//.print("T3: ",Tablero3);
 		.delete(3,11,Tablero3,Tablero4);
-		//.print(Tablero4);
 		//Descarta las casillas que se evaluaran posteriormente
 		.delete(4,Tam,Tablero4,Raya);
-		//.print("Raya: ", Raya);
 		?raya(Raya,Solucion,P);		
 		if(P==1){
 			.print("Voy a ganar con PV: ", PosicionVertical+Solucion);
@@ -185,14 +181,10 @@ raya(L,X,P) :- P=1500 & X=0.
 		//Descarta las casillas ya evaluadas
 		.delete(0,Num,L,Tablero);
 		.delete(1,8,Tablero,Tablero2);
-		.print("T2: ", Tablero2);
 		.delete(2,9,Tablero2,Tablero3);
-		.print("T3: ",Tablero3);
 		.delete(3,10,Tablero3,Tablero4);
-		.print(Tablero4);
 		//Descarta las casillas que se evaluaran posteriormente
 		.delete(4,Tam,Tablero4,Raya);
-		.print("Raya: ", Raya);
 		?raya(Raya,Solucion,P);		
 		if(P==1){
 			.print("Voy a ganar con DIAGONAL DERECHA: ", PosicionVertical+Solucion);
