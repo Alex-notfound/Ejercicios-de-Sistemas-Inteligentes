@@ -57,7 +57,7 @@ raya(L,X,P) :- P=1500 & X=0.
 	!estrategiaHorizontal;
 	!estrategiaVertical;
 	!estrategiaDiagonalIzq;
-	//!estrategiaDiagonalDer;
+	!estrategiaDiagonalDer;
 	?prioridad(PF);
 	if(PF<1000){
 		?x(X);
@@ -162,7 +162,7 @@ raya(L,X,P) :- P=1500 & X=0.
 		?raya(Raya,Solucion,P);		
 		if(P==1){
 			.print("Voy a ganar con PV: ", PosicionVertical+Solucion);
-			put(Num mod 8+Solucion,PosicionVertical+Solucion);
+			put((Num mod 8)+Solucion,PosicionVertical+Solucion);
 		}
 			
 		?prioridad(PM);
@@ -178,33 +178,32 @@ raya(L,X,P) :- P=1500 & X=0.
 	}
 .
 
-/*
 +!estrategiaDiagonalDer : tablero(L) <-
 	.length(L, Tam);
-	for(.range(Num,0,39)){
+	for(.range(Num,0,36)){
 		PosicionVertical = Num div 8;
 		//Descarta las casillas ya evaluadas
 		.delete(0,Num,L,Tablero);
-		.delete(1,9,Tablero,Tablero2);
+		.delete(1,8,Tablero,Tablero2);
 		.print("T2: ", Tablero2);
-		.delete(2,10,Tablero2,Tablero3);
+		.delete(2,9,Tablero2,Tablero3);
 		.print("T3: ",Tablero3);
-		.delete(3,11,Tablero3,Tablero4);
+		.delete(3,10,Tablero3,Tablero4);
 		.print(Tablero4);
 		//Descarta las casillas que se evaluaran posteriormente
 		.delete(4,Tam,Tablero4,Raya);
 		.print("Raya: ", Raya);
 		?raya(Raya,Solucion,P);		
 		if(P==1){
-			.print("Voy a ganar con PV: ", PosicionVertical+Solucion);
-			put(Num mod 8,PosicionVertical+Solucion);
+			.print("Voy a ganar con DIAGONAL DERECHA: ", PosicionVertical+Solucion);
+			put((Num mod 8)+Solucion,PosicionVertical+Solucion);
 		}
 			
 		?prioridad(PM);
 		if(P<PM){
 			.print("P es ", P, " y PM es ", PM);
 			-+prioridad(P);
-			X=Num mod 8;
+			X=(Num mod 8)+Solucion;
 			-+x(X);
 			Y=PosicionVertical+Solucion;
 			-+y(Y);
@@ -212,7 +211,7 @@ raya(L,X,P) :- P=1500 & X=0.
 		}
 	}
 .
-*/
+
 +!jugar : estrategia(jugarAPerder) & tablero(X,Y,V) <- put(X,Y); !start.
 
 //Plan por defecto para otros casos, de este modo se trata de evitar ser engañado.
