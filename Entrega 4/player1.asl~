@@ -150,28 +150,29 @@ raya(L,X,P) :- P=1500 & X=0.
 	for(.range(Num,0,33)){
 		if((Num mod 8) < 5){
 			PosicionVertical = Num div 8;
-			//Descarta las casillas ya evaluadas
+			//Descarta las casillas que no pertenezcan a la diagonal actual
 			.delete(0,Num,L,Tablero);
 			.delete(1,9,Tablero,Tablero2);
 			.delete(2,10,Tablero2,Tablero3);
 			.delete(3,11,Tablero3,Tablero4);
-			//Descarta las casillas que se evaluaran posteriormente
 			.delete(4,Tam,Tablero4,Raya);
+			//Obtiene la Prioridad y la posicion en la que se debe colocar la ficha
 			?raya(Raya,Solucion,P);		
+			//Si la prioridad es 1, ejecuta la jugada ganadora
 			if(P==1){
-				.print("Voy a ganar con DIAGONAL IZQ, con Num: ", Num, " y solucion: ", Solucion);
-				put((Num mod 8)+Solucion,PosicionVertical+Solucion);
-			}
-				
-			?prioridad(PM);
-			if(P<PM){
-				.print("P es ", P, " y PM es ", PM);
 				-+prioridad(P);
-				X=(Num mod 8)+Solucion;
-				-+x(X);
-				Y=PosicionVertical+Solucion;
-				-+y(Y);
-				.print("[",X,",",Y,"]");
+				put((Num mod 8)+Solucion,PosicionVertical+Solucion);
+			}else{
+				?prioridad(PM);
+				if(P<PM){
+					.print("P es ", P, " y PM es ", PM);
+					-+prioridad(P);
+					X=(Num mod 8)+Solucion;
+					-+x(X);
+					Y=PosicionVertical+Solucion;
+					-+y(Y);
+					.print("[",X,",",Y,"]");
+				}
 			}
 		}
 	}
@@ -182,28 +183,28 @@ raya(L,X,P) :- P=1500 & X=0.
 	for(.range(Num,0,36)){
 		if((Num mod 8) > 2){
 			PosicionVertical = Num div 8;
-			//Descarta las casillas ya evaluadas
+			//Descarta las casillas que no pertenezcan a la diagonal actual
 			.delete(0,Num,L,Tablero);
 			.delete(1,7,Tablero,Tablero2);
 			.delete(2,8,Tablero2,Tablero3);
 			.delete(3,9,Tablero3,Tablero4);
-			//Descarta las casillas que se evaluaran posteriormente
 			.delete(4,Tam,Tablero4,Raya);
+			//Obtiene la Prioridad y la posicion en la que se debe colocar la ficha
 			?raya(Raya,Solucion,P);		
+			//Si la prioridad es 1, ejecuta la jugada ganadora
 			if(P==1){
-				.print("Voy a ganar con DIAGONAL DERECHA: ", PosicionVertical+Solucion);
-				put((Num mod 8)-Solucion,PosicionVertical+Solucion);
-			}
-				
-			?prioridad(PM);
-			if(P<PM){
-				//.print("P es ", P, " y PM es ", PM);
 				-+prioridad(P);
-				X=(Num mod 8)-Solucion;
-				-+x(X);
-				Y=PosicionVertical+Solucion;
-				-+y(Y);
-				.print("[",X,",",Y,"]");
+				put((Num mod 8)-Solucion,PosicionVertical+Solucion);
+			}else{
+				?prioridad(PM);
+				if(P<PM){
+					-+prioridad(P);
+					X=(Num mod 8)-Solucion;
+					-+x(X);
+					Y=PosicionVertical+Solucion;
+					-+y(Y);
+					.print("[",X,",",Y,"]");
+				}
 			}
 		}
 	}
