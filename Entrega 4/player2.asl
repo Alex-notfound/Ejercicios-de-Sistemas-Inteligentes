@@ -1,8 +1,8 @@
 /* Initial beliefs and rules */
 colocar(NextX,NextY):- 
 						/*Empezar de primero*/
-						tablero(X,Y,0)[source(percept)] & tablero([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])[source(percept)] 
-						& tablero(4,3,0)[source(percept)] & NextX = 4 & NextY = 3 & .print("Colocar de tablero vacio").
+						tablero([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])[source(percept)] 
+						& NextX = 4 & NextY = 3.
 colocar(NextX,NextY):-
 //Lineas 10-11-12 Comentadas xq no tiene codigo de bloquear, esta en player1 sin acondicionar a player2(Cambiar ,1 por ,2 y viceversa)
 							/*Movimientos Bloquear*/ 
