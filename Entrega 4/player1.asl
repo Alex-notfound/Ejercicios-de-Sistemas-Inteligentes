@@ -53,7 +53,7 @@ raya(L,X,P) :- P=1500 & X=0.
 +!jugar : estrategia(jugarAGanar) <- !buscar4enRaya; .print("FIN");!start.
 
 +!buscar4enRaya <-
-	
+	.send(player2,tell,jugar(jugarAPerder));
 	!estrategiaHorizontal;
 	!estrategiaVertical;
 	!estrategiaDiagonalIzq;

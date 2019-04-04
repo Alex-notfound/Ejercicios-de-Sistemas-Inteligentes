@@ -1,4 +1,3 @@
-
 /* Initial beliefs and rules */
 colocar(NextX,NextY):- 
 						/*Empezar de primero*/
@@ -148,7 +147,6 @@ unoEnRaya(BestX,BestY):-
 						|tablero(X,Y,2)[source(percept)] & tablero(X-1,Y-1,2)[source(percept)]& tablero(X-2,Y-2,0)[source(percept)]  & BestX = X-2 & BestY = Y-2
 						|tablero(X,Y,2)[source(percept)] & tablero(X-1,Y-1,2)[source(percept)]& tablero(X-2,Y-2,2)[source(percept)]& tablero(X-3,Y-3,0)[source(percept)]  & BestX-3 = X & BestY = Y-3
 						
-						
 						//estrategia colocar diagonal abajo derecha
 						|tablero(X,Y,2)[source(percept)] & tablero(X+1,Y+1,0)[source(percept)]  & BestX = X+1 & BestY = Y+1
 						|tablero(X,Y,2)[source(percept)] & tablero(X+1,Y+1,2)[source(percept)]& tablero(X+2,Y+2,0)[source(percept)]  & BestX = X+2 & BestY = Y+2
@@ -232,7 +230,7 @@ colocarFicha(BestX,BestY):-
 
 /* Plans */
 
-+!start <-.wait(turno(player2)[source(percept)]); !jugar.
++!start <-.my_name(Self); .wait(turno(Self)[source(percept)]); !jugar.
 +!jugar : estrategia(jugarAGanar) //& tablero(X,Y,V)
 					<- //preguntar por el valor de X e Y  al belief 
 						?colocar(NextX,NextY);
@@ -247,6 +245,9 @@ colocarFicha(BestX,BestY):-
 						//pasar el valor de X e Y con 
 						put(NextX,NextY);
 						!start.
+
+//Plan por defecto para otros casos, de este modo se trata de evitar ser engañado.
++Default[source(A)]: not A=self & not A=percept <- .print("Ignoro al agente ", A).			
 
 /*
 
