@@ -1,12 +1,11 @@
 /* Initial beliefs and rules */
 
-colocar(BestX,BestY):- 
-						/*Empezar de primero*/
+colocar(BestX,BestY,EquipoAliado,EquipoEnemigo):- 
+						//Si es el primer turno de la partida, coloca en (4,3)
 						tablero([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])[source(percept)] 
 						& BestX = 4 & BestY = 3.
 
 colocar(BestX,BestY,EquipoAliado,EquipoEnemigo):-
-//Lineas 10-11-12 Comentadas xq no tiene codigo de bloquear, esta en player1 sin acondicionar a player2(Cambiar ,EquipoEnemigo por ,EquipoAliado y viceversa)
 							/*Movimientos Bloquear*/ 
 							cuatroEnRaya(BestX,BestY,EquipoAliado)
 							|bloquearCuatroEnRaya(BestX,BestY,EquipoAliado,EquipoEnemigo)
@@ -186,21 +185,29 @@ bloquearTresEnRaya(BestX,BestY,EquipoAliado,EquipoEnemigo):-
 						|tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X+1,Y,EquipoEnemigo)[source(percept)] & tablero(X-1,Y,0)[source(percept)]  & BestX = X-1 & BestY = Y.
 
 //Modo perder
-colocarPerder(X,Y):- 
-							/*Empezar de primero*/
-							tablero(X,Y,0)[source(percept)] & tablero([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])[source(percept)] 
-							& .print("Colocar de tablero vacio").
-colocarPerder(X,Y):-
-							tablero(X,Y,0)[source(percept)] & not unoEnRaya(X,Y,EquipoAliado)//uno cualquiera que no haga 4 en raya
-							|tablero(X,Y,0)[source(percept)] & not dosEnRaya(X,Y,EquipoAliado)//uno cualquiera que no haga 4 en raya
-							|tablero(X,Y,0)[source(percept)] & not tresEnRaya(X,Y,EquipoAliado)//uno cualquiera que no haga 4 en raya
-							|tablero(X,Y,0)[source(percept)] & not cuatroEnRaya(X,Y,EquipoAliado)//uno cualquiera que no haga 4 en raya
-							|tablero(X,Y,0)[source(percept)]. //uno cualquiera
+colocarPerder(X,Y,EquipoAliado,EquipoEnemigo):- 
+							//Si es el primer turno de la partida, coloca en cualquier sitio libre
+							tablero(X,Y,0)[source(percept)] & tablero([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])[source(percept)].
+colocarPerder(X,Y,EquipoAliado,EquipoEnemigo):-
+							 tablero(X,Y,0)[source(percept)] & not unoEnRaya(X,Y,EquipoAliado) & not bloquearCuatroEnRaya(BestX,BestY,EquipoAliado,EquipoEnemigo)
+							|tablero(X,Y,0)[source(percept)] & not unoEnRaya(X,Y,EquipoAliado) & not bloquearTresEnRaya(BestX,BestY,EquipoAliado,EquipoEnemigo)
+							
+							|tablero(X,Y,0)[source(percept)] & not dosEnRaya(X,Y,EquipoAliado )& not bloquearCuatroEnRaya(BestX,BestY,EquipoAliado,EquipoEnemigo)
+							|tablero(X,Y,0)[source(percept)] & not dosEnRaya(X,Y,EquipoAliado) & not bloquearTresEnRaya(BestX,BestY,EquipoAliado,EquipoEnemigo)
+							
+							|tablero(X,Y,0)[source(percept)] & not tresEnRaya(X,Y,EquipoAliado) & not bloquearCuatroEnRaya(BestX,BestY,EquipoAliado,EquipoEnemigo)
+							|tablero(X,Y,0)[source(percept)] & not tresEnRaya(X,Y,EquipoAliado) & not bloquearTresEnRaya(BestX,BestY,EquipoAliado,EquipoEnemigo)
 
-conocerEquipo(player1):- .abolish(equipoAliado(_)) & .asserta(equipoAliado(1)) & .abolish(equipoEnemigo(_)) & .asserta(equipoEnemigo(2)) 
-							& .abolish(nombreEnemigo(_)) & .asserta(nombreEnemigo(player2)).
-conocerEquipo(player2):- .abolish(equipoAliado(_)) & .asserta(equipoAliado(2)) & .abolish(equipoEnemigo(_)) & .asserta(equipoEnemigo(1)) 
-							& .abolish(nombreEnemigo(_)) & .asserta(nombreEnemigo(player1)).
+							|tablero(X,Y,0)[source(percept)] & not cuatroEnRaya(X,Y,EquipoAliado) & not bloquearCuatroEnRaya(BestX,BestY,EquipoAliado,EquipoEnemigo)
+							|tablero(X,Y,0)[source(percept)] & not cuatroEnRaya(X,Y,EquipoAliado) & not bloquearTresEnRaya(BestX,BestY,EquipoAliado,EquipoEnemigo)
+
+							|tablero(X,Y,0)[source(percept)] & not unoEnRaya(X,Y,EquipoAliado)
+							|tablero(X,Y,0)[source(percept)] & not dosEnRaya(X,Y,EquipoAliado)
+							|tablero(X,Y,0)[source(percept)] & not tresEnRaya(X,Y,EquipoAliado)
+							|tablero(X,Y,0)[source(percept)].
+							
+conocerEquipo(player1):- .abolish(equipoAliado(_)) & .asserta(equipoAliado(1)) & .abolish(equipoEnemigo(_)) & .asserta(equipoEnemigo(2)).
+conocerEquipo(player2):- .abolish(equipoAliado(_)) & .asserta(equipoAliado(2)) & .abolish(equipoEnemigo(_)) & .asserta(equipoEnemigo(1)).
 
 /* Initial goals */
 
@@ -215,15 +222,14 @@ conocerEquipo(player2):- .abolish(equipoAliado(_)) & .asserta(equipoAliado(2)) &
 +!jugar : estrategia(jugarAGanar)[source(percept)] & equipoAliado(EquipoAliado) & equipoEnemigo(EquipoEnemigo)
 					<- //preguntar por el valor de X e Y  al belief 
 						?colocar(BestX,BestY,EquipoAliado,EquipoEnemigo);
-						//pasar el valor de X e Y con
+						//Coloca ficha en el tablero
 						put(BestX,BestY);	
 						!esperar.
 
-+!jugar : estrategia(jugarAPerder)[source(percept)] //& tablero(X,Y,V)[source(percept)] <- put(X,Y); !start.
++!jugar : estrategia(jugarAPerder)[source(percept)]  & equipoAliado(EquipoAliado) & equipoEnemigo(EquipoEnemigo)
 					<- //preguntar por el valor de X e Y  al belief 
-						.print("PERDIENDO");	
 						?colocarPerder(BestX,BestY,EquipoAliado,EquipoEnemigo);
-						//pasar el valor de X e Y con 
+						//Coloca ficha en el tablero
 						put(BestX,BestY);
 						!esperar.
 
