@@ -135,7 +135,7 @@ raya(L,X,P) :- P=1500 & X=0.
 		.delete(3,10,Tablero3,Tablero4);
 		//Descarta las casillas que se evaluaran posteriormente
 		.delete(4,Tam,Tablero4,Raya);
-					.print("Raya: ", Raya);
+		//.print("Raya: ", Raya);
 		?raya(Raya,Solucion,P);		
 		if(P==1){
 			.print("Voy a ganar con Num: ", Num, " PV: ", PosicionVertical+Solucion);
@@ -173,7 +173,7 @@ raya(L,X,P) :- P=1500 & X=0.
 			}else{
 				?prioridad(PM);
 				if(P<PM){
-					.print("P es ", P, " y PM es ", PM);
+					//.print("P es ", P, " y PM es ", PM);
 					-+prioridad(P);
 					X=(Num mod 8)+Solucion;
 					-+x(X);
