@@ -1,21 +1,22 @@
 /* Initial beliefs and rules */
-colocar(NextX,NextY):- 
+
+colocar(BestX,BestY):- 
 						/*Empezar de primero*/
 						tablero([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])[source(percept)] 
-						& NextX = 4 & NextY = 3.
-colocar(NextX,NextY):-
+						& BestX = 4 & BestY = 3.
+
+colocar(BestX,BestY):-
 //Lineas 10-11-12 Comentadas xq no tiene codigo de bloquear, esta en player1 sin acondicionar a player2(Cambiar ,1 por ,2 y viceversa)
 							/*Movimientos Bloquear*/ 
-							not cuatroEnRaya(BestX,BestY) & bloquearCuatroEnRaya(BestX,BestY) & NextX = BestX  & NextY = BestY
-				//			|not tresEnRaya(BestX,BestY) & bloquearTresEnRaya(BestX,BestY) & NextX = BestX  & NextY = BestY
+							cuatroEnRaya(BestX,BestY)
+							|bloquearCuatroEnRaya(BestX,BestY)
 							/*Movimientos en raya*/
-							|cuatroEnRaya(BestX,BestY) & NextX = BestX  & NextY = BestY
-							|tresEnRaya(BestX,BestY) & NextX = BestX  & NextY = BestY
-							|dosEnRaya(BestX,BestY) & NextX = BestX  & NextY = BestY
-     						|unoEnRaya(BestX,BestY) & NextX = BestX  & NextY = BestY
+							|tresEnRaya(BestX,BestY)
+							|dosEnRaya(BestX,BestY)
+     						|unoEnRaya(BestX,BestY)
 							/*Movimientos empezar de segundo*/
-							|tablero(4,3,0)[source(percept)] & NextX = 4 & NextY = 3
-							|tablero(X,Y,0)[source(percept)] & NextX = X & NextY = Y.
+							|tablero(4,3,0)[source(percept)] & BestX = 4 & BestY = 3
+							|tablero(X,Y,0)[source(percept)] & BestX = X & BestY = Y.
 
 cuatroEnRaya(BestX,BestY):-
 					/*4 en raya*/
@@ -146,7 +147,6 @@ unoEnRaya(BestX,BestY):-
 						|tablero(X,Y,2)[source(percept)] & tablero(X-1,Y-1,0)[source(percept)]  & BestX = X-1 & BestY = Y-1
 						|tablero(X,Y,2)[source(percept)] & tablero(X-1,Y-1,2)[source(percept)]& tablero(X-2,Y-2,0)[source(percept)]  & BestX = X-2 & BestY = Y-2
 						|tablero(X,Y,2)[source(percept)] & tablero(X-1,Y-1,2)[source(percept)]& tablero(X-2,Y-2,2)[source(percept)]& tablero(X-3,Y-3,0)[source(percept)]  & BestX-3 = X & BestY = Y-3
-						
 						//estrategia colocar diagonal abajo derecha
 						|tablero(X,Y,2)[source(percept)] & tablero(X+1,Y+1,0)[source(percept)]  & BestX = X+1 & BestY = Y+1
 						|tablero(X,Y,2)[source(percept)] & tablero(X+1,Y+1,2)[source(percept)]& tablero(X+2,Y+2,0)[source(percept)]  & BestX = X+2 & BestY = Y+2
@@ -182,47 +182,27 @@ bloquearCuatroEnRaya(BestX,BestY):-
 bloquearTresEnRaya(BestX,BestY):- //listo
 						/*Bloquear 3 en raya*/
 						/*Bloquear 3 en raya Diagonal*/
-						tablero(X,Y,1)[source(percept)] & tablero(X+1,Y+1,1)[source(percept)] & tablero(X-1,Y-1,0)[source(percept)] & BestX = X-1 & BestY = Y-1
-						|tablero(X,Y,1)[source(percept)] & tablero(X+1,Y+1,1)[source(percept)] & tablero(X+2,Y+2,0)[source(percept)] & BestX = X+2 & BestY = Y+2
-						|tablero(X,Y,1)[source(percept)] & tablero(X+1,Y+1,0)[source(percept)] & tablero(X+2,Y+2,2)[source(percept)] & BestX = X+1 & BestY = Y+1	
+						tablero(X,Y,1)[source(percept)] & tablero(X+1,Y+1,2)[source(percept)] & tablero(X-1,Y-1,0)[source(percept)] & BestX = X-1 & BestY = Y-1
+						|tablero(X,Y,1)[source(percept)] & tablero(X+1,Y+1,2)[source(percept)] & tablero(X+2,Y+2,0)[source(percept)] & BestX = X+2 & BestY = Y+2
+						|tablero(X,Y,1)[source(percept)] & tablero(X+1,Y+1,0)[source(percept)] & tablero(X+2,Y+2,1)[source(percept)] & BestX = X+1 & BestY = Y+1	
 						/*Bloquear 3 en raya horizontal*/
 						|tablero(X,Y,1)[source(percept)] & tablero(X+1,Y,1)[source(percept)] & tablero(X-1,Y,0)[source(percept)] & BestX = X-1 & BestY = Y
 						|tablero(X,Y,1)[source(percept)] & tablero(X+1,Y,1)[source(percept)] & tablero(X+2,Y,0)[source(percept)] & BestX = X+2 & BestY = Y
 						|tablero(X,Y,1)[source(percept)] & tablero(X+1,Y,0)[source(percept)] & tablero(X+2,Y,2)[source(percept)] & BestX = X+1 & BestY = Y
-						/*Bloquear 3 en raya Vertical*/ 
+						/*Bloquear 3 en raya Vertical*/
 						|tablero(X,Y,1)[source(percept)] & tablero(X,Y+1,1)[source(percept)] & tablero(X,Y-1,0)[source(percept)] & BestX = X & BestY = Y-1
 						|tablero(X,Y,1)[source(percept)] & tablero(X,Y+1,1)[source(percept)] & tablero(X,Y+2,0)[source(percept)] & BestX = X & BestY = Y+2
 						|tablero(X,Y,1)[source(percept)] & tablero(X,Y+1,0)[source(percept)] & tablero(X,Y+2,2)[source(percept)] & BestX = X & BestY = Y+1.
-										
+
 /*PERDER*/
-colocarPerder(NextX,NextY):- 
+colocarPerder(BestX,BestY):- 
 							/*Empezar de primero*/
 							tablero(X,Y,0)[source(percept)] & tablero([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])[source(percept)] 
-							& NextX = X & NextY = Y & .print("Colocar de tablero vacio").
-colocarPerder(NextX,NextY):-
-							//not cuatroEnRaya(BestX,BestY) & colocarFicha(BestX,BestY) & NextX = BestX  & NextY = BestY.
-							tablero(X,Y,0)[source(percept)] & NextX = X & NextY = Y & not cuatroEnRaya(X,Y)//uno cualquiera que no haga 4 en raya
-							|tablero(X,Y,0)[source(percept)] & NextX = X & NextY = Y & .print("Movimiento final aleatorio").
-/* No se usa para nada
-colocarFicha(BestX,BestY):-
-							//estrategia colocar derecha
-							tablero(X,Y,0)[source(percept)] & tablero(X+1,Y,0)[source(percept)]  & BestX = X & BestY = Y
-							//estrategia colocar izquierda
-							|tablero(X,Y,0)[source(percept)] & tablero(X-1,Y,0)[source(percept)]  & BestX = X & BestY = Y
-							//estrategia colocar arriba
-							|tablero(X,Y,0)[source(percept)] & tablero(X,Y-1,0)[source(percept)]  & BestX = X & BestY = Y
-							//estrategia colocar abajo
-							|tablero(X,Y,0)[source(percept)] & tablero(X,Y+1,0)[source(percept)]  & BestX = X & BestY = Y
-							
-							//estrategia colocar diagonal arriba izquierda
-							|tablero(X,Y,0)[source(percept)] & tablero(X-1,Y-1,0)[source(percept)]  & BestX = X & BestY = Y
-							//estrategia colocar diagonal arriba derecha
-							|tablero(X,Y,0)[source(percept)] & tablero(X-1,Y+1,0)[source(percept)]  & BestX = X & BestY = Y
-							//estrategia colocar diagonal abajo izquierda
-							|tablero(X,Y,0)[source(percept)] & tablero(X+1,Y-1,0)[source(percept)]  & BestX = X & BestY = Y
-							//estrategia colocar diagonal abajo derecha
-							|tablero(X,Y,0)[source(percept)] & tablero(X+1,Y+1,0)[source(percept)]  & BestX = X & BestY = Y.
-*/
+							& BestX = X & BestY = Y & .print("Colocar de tablero vacio").
+colocarPerder(BestX,BestY):-
+							//not cuatroEnRaya(BestX,BestY) & colocarFicha(BestX,BestY) & BestX = BestX  & BestY = BestY.
+							tablero(X,Y,0)[source(percept)] & BestX = X & BestY = Y & not cuatroEnRaya(X,Y)//uno cualquiera que no haga 4 en raya
+							|tablero(X,Y,0)[source(percept)] & BestX = X & BestY = Y & .print("Movimiento final aleatorio").
 
 /* Initial goals */
 
@@ -233,58 +213,18 @@ colocarFicha(BestX,BestY):-
 +!start <-.my_name(Self); .wait(turno(Self)[source(percept)]); !jugar.
 +!jugar : estrategia(jugarAGanar) //& tablero(X,Y,V)
 					<- //preguntar por el valor de X e Y  al belief 
-						?colocar(NextX,NextY);
+						?colocar(BestX,BestY);
 						//pasar el valor de X e Y con 
-						put(NextX,NextY);	
+						put(BestX,BestY);	
 						!start.
 //problema de la reina pag103
 +!jugar : estrategia(jugarAPerder) //& tablero(X,Y,V)[source(percept)] <- put(X,Y); !start.
 					<- //preguntar por el valor de X e Y  al belief 
 						.print("PERDIENDO");	
-						?colocarPerder(NextX,NextY);
+						?colocarPerder(BestX,BestY);
 						//pasar el valor de X e Y con 
-						put(NextX,NextY);
+						put(BestX,BestY);
 						!start.
 
 //Plan por defecto para otros casos, de este modo se trata de evitar ser engañado.
 +Default[source(A)]: not A=self & not A=percept <- .print("Ignoro al agente ", A).			
-
-/*
-
-//tipo de juego viene del environment linea 573-580
-+!start <-.wait(turno(player2)[source(percept)]); !jugar.
-
-
-+!jugar : estrategia(jugarAGanar) & turno(player2) & tablero(X,Y,0) <- .print(X,Y); put(X,Y); !start.//& tablero(X,Y,V)
-/*
-+!jugar : estrategia(jugarAGanar) & turno(player2) & tablero(5,3,0) //<- put(X,Y); !start.//& tablero(X,Y,V)
-					<- put(5,3);
-						!start.
-+!jugar : estrategia(jugarAGanar) & turno(player2) & tablero(2,3,0) //<- put(X,Y); !start.//& tablero(X,Y,V)
-					<- put(2,3);
-						!start.
-+!jugar : estrategia(jugarAGanar) & turno(player2) & tablero(3,5,0) //<- put(X,Y); !start.//& tablero(X,Y,V)
-					<- put(3,5);
-						!start.
-+!jugar : estrategia(jugarAGanar) & turno(player2) & tablero(2,3,0) //<- put(X,Y); !start.//& tablero(X,Y,V)
-					<- put(2,3);
-						!start.
-+!jugar : estrategia(jugarAGanar) & turno(player2) & tablero(5,4,0) //<- put(X,Y); !start.//& tablero(X,Y,V)
-					<- put(5,4);
-						!start.
-+!jugar : estrategia(jugarAGanar) & turno(player2) & tablero(1,4,0) //<- put(X,Y); !start.//& tablero(X,Y,V)
-					<- put(1,4);
-						!start.
-+!jugar : estrategia(jugarAGanar) & turno(player2) & tablero(1,6,0) //<- put(X,Y); !start.//& tablero(X,Y,V)
-					<- put(1,6);
-						!start.
-*/
-					
-
-
-
-
-
-
-
-
