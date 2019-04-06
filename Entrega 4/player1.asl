@@ -218,7 +218,7 @@ raya(L,X,P) :- P=1500 & X=0.
 	}
 .
 
-+!jugar : estrategia(jugarAPerder) & tablero(X,Y,V) <- put(X,Y); !start.
++!jugar : estrategia(jugarAPerder) & tablero(X,Y,0) <- put(X,Y); !start.
 
 //Plan por defecto para otros casos, de este modo se trata de evitar ser engañado.
 +Default[source(A)]: not A=self & not A=percept <- .print("Ignoro al agente ", A).
