@@ -46,28 +46,36 @@ raya(L,X,P) :- P=1500 & X=0.
 
 /* Plans */
 
+//Espera a que sea su turno para jugar
 +!start <-.wait(turno(player1)); !jugar.
-
+//Si es el primer turno coloca en una posicion cualquiera
 +!jugar : estrategia(jugarAGanar) & tablero([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]) & tablero(X,Y,0) <- put(X,Y); !start.
-
-+!jugar : estrategia(jugarAGanar) <- !buscar4enRaya; .print("FIN");!start.
+//En cualquier otro caso analiza las posibilidades, coloca y vuelve a esperar su turno
++!jugar : estrategia(jugarAGanar) <- !buscar4enRaya;!start.
 
 +!buscar4enRaya <-
-	
+	//Intenta confundir al jugador contrario
+	.send(player2,tell,estrategia(jugarAPerder));
+	//Busca la mejor posicion para colocar una ficha en relacion a una raya horizontal aliada o enemiga
 	!estrategiaHorizontal;
+	//Busca la mejor posicion para colocar una ficha en relacion a una raya vertical aliada o enemiga
 	!estrategiaVertical;
+	//Busca la mejor posicion para colocar una ficha en relacion a una raya diagonal \ aliada o enemiga
 	!estrategiaDiagonalIzq;
+	//Busca la mejor posicion para colocar una ficha en relacion a una raya diagonal / aliada o enemiga
 	!estrategiaDiagonalDer;
+	//Pregunta por la ultima prioridad almacenada
 	?prioridad(PF);
+	//Si el nivel de prioridad es relevante, pregunta por la mejor posicion calculada y coloca
 	if(PF<1000){
 		?x(X);
 		?y(Y);
 		put(X,Y);
-	}
+	} //En otro caso, coloca en un sitio aleatorio disponible
 	else{
 		?tablero(Q,W,0);
 		put(Q,W)
-	}
+	} //Resetea la prioridad
 	-+prioridad(2000).
 
 +!estrategiaHorizontal : tablero(L) <-
