@@ -8,23 +8,23 @@ Se pioriza evitar el 4 y 3 en raya del contrario a otro mivimiento que no sea el
 para conseguir el 3 o el 4 en raya por parte del propio agente.
 */
 
-colocar(BestX,BestY,EquipoAliado,EquipoEnemigo):- 
+colocar(BestX,EquipoAliado,EquipoEnemigo):- 
 						//Si es el primer turno de la partida, coloca en (4,3)
 						tablero([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])[source(percept)] 
-						& BestX = 4 & BestY = 3.
+						& BestX = 4.
 
-colocar(BestX,BestY,EquipoAliado,EquipoEnemigo):-
+colocar(BestX,EquipoAliado,EquipoEnemigo):-
 							/*Movimientos Bloquear*/ 
-							cuatroEnRaya(BestX,BestY,EquipoAliado)
-							|bloquearCuatroEnRaya(BestX,BestY,EquipoAliado,EquipoEnemigo)
-							|bloquearTresEnRaya(BestX,BestY,EquipoAliado,EquipoEnemigo)
+							cuatroEnRaya(BestX,EquipoAliado)
+							|bloquearCuatroEnRaya(BestX,EquipoAliado,EquipoEnemigo)
+							|bloquearTresEnRaya(BestX,EquipoAliado,EquipoEnemigo)
 							/*Movimientos en raya*/
-							|tresEnRaya(BestX,BestY,EquipoAliado)
-							|dosEnRaya(BestX,BestY,EquipoAliado)
-     						|unoEnRaya(BestX,BestY,EquipoAliado)
+							|tresEnRaya(BestX,EquipoAliado)
+							|dosEnRaya(BestX,EquipoAliado)
+     						|unoEnRaya(BestX,EquipoAliado)
 							/*Movimientos empezar de segundo*/
-							|tablero(4,3,0)[source(percept)] & BestX = 4 & BestY = 3
-							|tablero(X,Y,0)[source(percept)] & not vacioDebajo(X,Y,0) & BestX = X & BestY = Y.
+							|tablero(4,7,0)[source(percept)] & BestX = 4
+							|tablero(X,Y,0)[source(percept)] & not vacioDebajo(X,Y,0) & BestX = X.
 
 vacioDebajo(X,7,1).
 vacioDebajo(X,Y,Toret) :- tablero(X,Y-1,Toret).
@@ -35,7 +35,7 @@ y de forma diagonal (diagonal de izquierda a derecha y de arria abajo, diagonal 
 diagonal de derecha a izquierda y de abajo arriba), ademas en cada una de ellas cabe la posibilidad de tener posiciones libres en medio, es decir, 2 seguidas ocupadas por el agente 
 una libre y otra ocupada por el agente o una ocupada por el agente una libre y dos seguidas ocupadas por el agente, en las que se colocará la ficha en la posición libre.
 */
-cuatroEnRaya(BestX,BestY,EquipoAliado):-
+cuatroEnRaya(BestX,EquipoAliado):-
 							/*4 en raya diagonal izq a derecha arriba abajo*/
 							//4 vacia
 							tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X+1,Y+1,EquipoAliado)[source(percept)] & tablero(X+2,Y+2,EquipoAliado)[source(percept)] & tablero(X+3,Y+3,0)[source(percept)] & not vacioDebajo(X+3,Y+3,0) & BestX = X+3
@@ -100,72 +100,72 @@ cuatroEnRaya(BestX,BestY,EquipoAliado):-
 	El predicado tresEnRaya busca colocar 3  fichas seguidas, al igual que el cuatroEnRaya, buscando 2 fichas del agente que estén consecutivas para colocar la ficha en algún extremo
 o en medio, preparando así la posibilidad de hacer un 4 en raya en el seguiente turno	
 */
-tresEnRaya(BestX,BestY,EquipoAliado):-
+tresEnRaya(BestX,EquipoAliado):-
 						/*3 en raya diagonal*/
-						tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X+1,Y+1,EquipoAliado)[source(percept)] & tablero(X+2,Y+2,0)[source(percept)] & not vacioDebajo(X,Y,0) & BestX = X+2 & BestY = Y+2
-						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X+1,Y+1,0)[source(percept)] & tablero(X+2,Y+2,EquipoAliado)[source(percept)] & not vacioDebajo(X,Y,0) & BestX = X+1 & BestY = Y+1
-						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X+1,Y+1,EquipoAliado)[source(percept)] & tablero(X+2,Y+2,EquipoAliado)[source(percept)] & tablero(X-1,Y-1,0)[source(percept)] & not vacioDebajo(X,Y,0) & BestX = X-1 & BestY = Y-1
+						tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X+1,Y+1,EquipoAliado)[source(percept)] & tablero(X+2,Y+2,0)[source(percept)] & not vacioDebajo(X+2,Y+2,0) & BestX = X+2 
+						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X+1,Y+1,0)[source(percept)] & tablero(X+2,Y+2,EquipoAliado)[source(percept)] & not vacioDebajo(X+1,Y+1,0) & BestX = X+1 
+						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X+1,Y+1,EquipoAliado)[source(percept)] & tablero(X+2,Y+2,EquipoAliado)[source(percept)] & tablero(X-1,Y-1,0)[source(percept)] & not vacioDebajo(X-1,Y-1,0) & BestX = X-1 
 						/*3 en raya vertical*/
-						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X,Y+1,EquipoAliado)[source(percept)] & tablero(X,Y+2,0)[source(percept)] & not vacioDebajo(X,Y,0) & BestX = X & BestY = Y+2
-						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X,Y+1,0)[source(percept)] & tablero(X,Y+2,EquipoAliado)[source(percept)] & not vacioDebajo(X,Y,0) & BestX = X & BestY = Y+1
-						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X,Y+1,EquipoAliado)[source(percept)] & tablero(X,Y+2,EquipoEnemigo)[source(percept)] & tablero(X,Y-1,0)[source(percept)] & not vacioDebajo(X,Y,0) & BestX = X & BestY = Y-1
+						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X,Y+1,EquipoAliado)[source(percept)] & tablero(X,Y+2,0)[source(percept)] & not vacioDebajo(X,Y+2,0) & BestX = X 
+						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X,Y+1,0)[source(percept)] & tablero(X,Y+2,EquipoAliado)[source(percept)] & not vacioDebajo(X,Y+1,0) & BestX = X 
+						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X,Y+1,EquipoAliado)[source(percept)] & tablero(X,Y+2,EquipoEnemigo)[source(percept)] & tablero(X,Y-1,0)[source(percept)] & not vacioDebajo(X,Y-1,0) & BestX = X 
 						/*3 en raya horizontal*/
-						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X+1,Y,EquipoAliado)[source(percept)] & tablero(X+2,Y,0)[source(percept)] & not vacioDebajo(X,Y,0) & BestX = X+2 & BestY = Y
-						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X+1,Y,0)[source(percept)] & tablero(X+2,Y,EquipoAliado)[source(percept)] & not vacioDebajo(X,Y,0) & BestX = X+1 & BestY = Y
-						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X+1,Y,EquipoAliado)[source(percept)] & tablero(X+2,Y,EquipoEnemigo)[source(percept)] & tablero(X-1,Y,0)[source(percept)] & not vacioDebajo(X,Y,0) & BestX = X-1 & BestY = Y.
+						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X+1,Y,EquipoAliado)[source(percept)] & tablero(X+2,Y,0)[source(percept)] & not vacioDebajo(X+2,Y,0) & BestX = X+2
+						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X+1,Y,0)[source(percept)] & tablero(X+2,Y,EquipoAliado)[source(percept)] & not vacioDebajo(X+1,Y,0) & BestX = X+1
+						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X+1,Y,EquipoAliado)[source(percept)] & tablero(X+2,Y,EquipoEnemigo)[source(percept)] & tablero(X-1,Y,0)[source(percept)] & not vacioDebajo(X-1,Y,0) & BestX = X-1.
 /*
 	El predicado dosEnRaya busca colocar 2 fichas seguidas, al igual que el tresEnRaya y el cuatroEnRaya, buscando una ficha en el tablero para colocar otra a su lado y posibilitar
 el colocar 3 fichas seguidas en el seguiente turno.
 */					
-dosEnRaya(BestX,BestY,EquipoAliado):-
+dosEnRaya(BestX,EquipoAliado):-
 						/*2 en raya Diagonal*/			
-						tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X+1,Y+1,0)[source(percept)] & tablero(X+2,Y+2,0)[source(percept)] & tablero(X+3,Y+3,0)[source(percept)] & not vacioDebajo(X,Y,0) & BestX = X+2 & BestY = Y+2
-						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X+1,Y+1,0)[source(percept)] & tablero(X+2,Y+2,0)[source(percept)] & tablero(X+3,Y+3,0)[source(percept)] & not vacioDebajo(X,Y,0) & BestX = X+3 & BestY = Y+3
-						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X+1,Y+1,EquipoAliado)[source(percept)] & tablero(X+2,Y+2,0)[source(percept)] & not vacioDebajo(X,Y,0) & BestX = X+2 & BestY = Y+2	
-						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X+1,Y+1,EquipoAliado)[source(percept)] & tablero(X-1,Y-1,0)[source(percept)] & not vacioDebajo(X,Y,0) & BestX = X-1 & BestY = Y-1
+						tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X+1,Y+1,0)[source(percept)] & tablero(X+2,Y+2,0)[source(percept)] & tablero(X+3,Y+3,0)[source(percept)] & not vacioDebajo(X+2,Y+2,0) & BestX = X+2
+						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X+1,Y+1,0)[source(percept)] & tablero(X+2,Y+2,0)[source(percept)] & tablero(X+3,Y+3,0)[source(percept)] & not vacioDebajo(X+3,Y+3,0) & BestX = X+3
+						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X+1,Y+1,EquipoAliado)[source(percept)] & tablero(X+2,Y+2,0)[source(percept)] & not vacioDebajo(X+2,Y+2,0) & BestX = X+2
+						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X+1,Y+1,EquipoAliado)[source(percept)] & tablero(X-1,Y-1,0)[source(percept)] & not vacioDebajo(X-1,Y-1,0) & BestX = X-1
 						/*2 en raya horizontal*/
-						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X+1,Y,EquipoAliado)[source(percept)] & tablero(X-1,Y,0)[source(percept)] & not vacioDebajo(X,Y,0) & BestX = X-1 & BestY = Y
-						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X+1,Y,EquipoAliado)[source(percept)] & tablero(X+2,Y,0)[source(percept)] & not vacioDebajo(X,Y,0) & BestX = X+2 & BestY = Y
+						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X+1,Y,EquipoAliado)[source(percept)] & tablero(X-1,Y,0)[source(percept)] & not vacioDebajo(X-1,Y,0) & BestX = X-1
+						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X+1,Y,EquipoAliado)[source(percept)] & tablero(X+2,Y,0)[source(percept)] & not vacioDebajo(X+2,Y,0) & BestX = X+2
 						/*2 en raya Vertical*/ 
-						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X,Y+1,EquipoAliado)[source(percept)] & tablero(X,Y+2,0)[source(percept)] & not vacioDebajo(X,Y,0) & BestX = X & BestY = Y+2
-						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X,Y+1,EquipoAliado)[source(percept)] & tablero(X,Y-1,0)[source(percept)] & not vacioDebajo(X,Y,0) & BestX = X & BestY = Y-1.
+						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X,Y+1,EquipoAliado)[source(percept)] & tablero(X,Y+2,0)[source(percept)] & not vacioDebajo(X,Y+2,0) & BestX = X
+						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X,Y+1,EquipoAliado)[source(percept)] & tablero(X,Y-1,0)[source(percept)] & not vacioDebajo(X,Y-1,0) & BestX = X.
 /*
 	El predicado unoEnRaya busca colocar una ficha en el tablero de forma que posibilite hacer uso del predicado dosEnRaya.
 */			
-unoEnRaya(BestX,BestY,EquipoAliado):-
+unoEnRaya(BestX,EquipoAliado):-
 						/*1 en raya*/
 						//estrategia colocar diagonal abajo izquierda
-						tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X+1,Y-1,0)[source(percept)]  & BestX = X+1 & BestY = Y-1
-						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X+1,Y-1,EquipoAliado)[source(percept)]& tablero(X+2,Y-2,0)[source(percept)]  & BestX = X+2 & BestY = Y-2
-						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X+1,Y-1,EquipoAliado)[source(percept)]& tablero(X+2,Y-2,EquipoAliado)[source(percept)]& tablero(X+3,Y-3,0)[source(percept)]  & BestX+3 = X & BestY = Y-3
+						tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X+1,Y-1,0)[source(percept)] & not vacioDebajo(X+1,Y-1,0) & BestX = X+1
+						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X+1,Y-1,EquipoAliado)[source(percept)]& tablero(X+2,Y-2,0)[source(percept)] & not vacioDebajo(X+2,Y-2,0) & BestX = X+2
+						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X+1,Y-1,EquipoAliado)[source(percept)]& tablero(X+2,Y-2,EquipoAliado)[source(percept)]& tablero(X+3,Y-3,0)[source(percept)] & not vacioDebajo(X+3,Y-3,0) & BestX = X+3
 						//estrategia colocar diagonal arriba derecha
-						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X-1,Y+1,0)[source(percept)]  & BestX = X-1 & BestY = Y+1
-						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X-1,Y+1,EquipoAliado)[source(percept)]& tablero(X-2,Y+2,0)[source(percept)]  & BestX = X-2 & BestY = Y+2
-						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X-1,Y+1,EquipoAliado)[source(percept)]& tablero(X-2,Y+2,EquipoAliado)[source(percept)]& tablero(X-3,Y+3,0)[source(percept)]  & BestX-3 = X & BestY = Y+3
+						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X-1,Y+1,0)[source(percept)] & not vacioDebajo(X-1,Y+1,0) & BestX = X-1
+						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X-1,Y+1,EquipoAliado)[source(percept)]& tablero(X-2,Y+2,0)[source(percept)] & not vacioDebajo(X-2,Y+2,0) & BestX = X-2
+						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X-1,Y+1,EquipoAliado)[source(percept)]& tablero(X-2,Y+2,EquipoAliado)[source(percept)]& tablero(X-3,Y+3,0)[source(percept)] & not vacioDebajo(X-3,Y+3,0) & BestX = X-3
 						//estrategia colocar derecha
-						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X+1,Y,0)[source(percept)]  & BestX = X+1 & BestY = Y
-						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X+1,Y,EquipoAliado)[source(percept)]& tablero(X+2,Y,0)[source(percept)]  & BestX = X+2 & BestY = Y
-						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X+1,Y,EquipoAliado)[source(percept)]& tablero(X+2,Y,EquipoAliado)[source(percept)]& tablero(X+3,Y,0)[source(percept)]  & BestX = X+3 & BestY = Y
+						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X+1,Y,0)[source(percept)] & not vacioDebajo(X+1,Y,0) & BestX = X+1
+						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X+1,Y,EquipoAliado)[source(percept)]& tablero(X+2,Y,0)[source(percept)] & not vacioDebajo(X+2,Y,0) & BestX = X+2
+						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X+1,Y,EquipoAliado)[source(percept)]& tablero(X+2,Y,EquipoAliado)[source(percept)]& tablero(X+3,Y,0)[source(percept)] & not vacioDebajo(X+3,Y,0) & BestX = X+3
 						//estrategia colocar izquierda
-						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X-1,Y,0)[source(percept)]  & BestX = X-1 & BestY = Y
-						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X-1,Y,EquipoAliado)[source(percept)]& tablero(X-2,Y,0)[source(percept)]  & BestX = X-2 & BestY = Y
-						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X-1,Y,EquipoAliado)[source(percept)]& tablero(X-2,Y,EquipoAliado)[source(percept)]& tablero(X-3,Y,0)[source(percept)]  & BestX = X-3 & BestY = Y
+						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X-1,Y,0)[source(percept)] & not vacioDebajo(X-1,Y,0) & BestX = X-1
+						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X-1,Y,EquipoAliado)[source(percept)]& tablero(X-2,Y,0)[source(percept)] & not vacioDebajo(X-2,Y,0) & BestX = X-2
+						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X-1,Y,EquipoAliado)[source(percept)]& tablero(X-2,Y,EquipoAliado)[source(percept)]& tablero(X-3,Y,0)[source(percept)] & not vacioDebajo(X-3,Y,0) & BestX = X-3
 						//estrategia colocar arriba
-						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X,Y+1,0)[source(percept)]  & BestX = X & BestY = Y+1
-						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X,Y+1,EquipoAliado)[source(percept)]& tablero(X,Y+2,0)[source(percept)]  & BestX = X & BestY = Y+2
-						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X,Y+1,EquipoAliado)[source(percept)]& tablero(X,Y+2,EquipoAliado)[source(percept)]& tablero(X,Y+3,0)[source(percept)]  & BestX = X & BestY = Y+3
+						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X,Y+1,0)[source(percept)] & not vacioDebajo(X,Y+1,0) & BestX = X
+						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X,Y+1,EquipoAliado)[source(percept)]& tablero(X,Y+2,0)[source(percept)] & not vacioDebajo(X,Y+2,0) & BestX = X
+						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X,Y+1,EquipoAliado)[source(percept)]& tablero(X,Y+2,EquipoAliado)[source(percept)]& tablero(X,Y+3,0)[source(percept)] & not vacioDebajo(X,Y+3,0) & BestX = X
 						//estrategia colocar abajo
-						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X,Y-1,0)[source(percept)]  & BestX = X & BestY = Y-1
-						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X,Y-1,EquipoAliado)[source(percept)]& tablero(X,Y-2,0)[source(percept)]  & BestX = X & BestY = Y-2
-						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X,Y-1,EquipoAliado)[source(percept)]& tablero(X,Y-2,EquipoAliado)[source(percept)]& tablero(X,Y-3,0)[source(percept)]  & BestX = X & BestY = Y-3
+						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X,Y-1,0)[source(percept)] & not vacioDebajo(X,Y-1,0) & BestX = X
+						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X,Y-1,EquipoAliado)[source(percept)]& tablero(X,Y-2,0)[source(percept)] & not vacioDebajo(X,Y-2,0) & BestX = X
+						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X,Y-1,EquipoAliado)[source(percept)]& tablero(X,Y-2,EquipoAliado)[source(percept)]& tablero(X,Y-3,0)[source(percept)] & not vacioDebajo(X,Y-3,0) & BestX = X
 						//estrategia colocar diagonal arriba izquierda
-						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X-1,Y-1,0)[source(percept)]  & BestX = X-1 & BestY = Y-1
-						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X-1,Y-1,EquipoAliado)[source(percept)]& tablero(X-2,Y-2,0)[source(percept)]  & BestX = X-2 & BestY = Y-2
-						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X-1,Y-1,EquipoAliado)[source(percept)]& tablero(X-2,Y-2,EquipoAliado)[source(percept)]& tablero(X-3,Y-3,0)[source(percept)]  & BestX-3 = X & BestY = Y-3
+						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X-1,Y-1,0)[source(percept)] & not vacioDebajo(X-1,Y-1,0) & BestX = X-1
+						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X-1,Y-1,EquipoAliado)[source(percept)]& tablero(X-2,Y-2,0)[source(percept)] & not vacioDebajo(X-2,Y-2,0) & BestX = X-2
+						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X-1,Y-1,EquipoAliado)[source(percept)]& tablero(X-2,Y-2,EquipoAliado)[source(percept)]& tablero(X-3,Y-3,0)[source(percept)] & not vacioDebajo(X-3,Y-3,0) & BestX = X-3
 						//estrategia colocar diagonal abajo derecha
-						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X+1,Y+1,0)[source(percept)]  & BestX = X+1 & BestY = Y+1
-						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X+1,Y+1,EquipoAliado)[source(percept)]& tablero(X+2,Y+2,0)[source(percept)]  & BestX = X+2 & BestY = Y+2
-						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X+1,Y+1,EquipoAliado)[source(percept)]& tablero(X+2,Y+2,EquipoAliado)[source(percept)]& tablero(X+3,Y+3,0)[source(percept)]  & BestX+3 = X & BestY = Y+3.		
+						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X+1,Y+1,0)[source(percept)] & not vacioDebajo(X+1,Y+1,0) & BestX = X+1
+						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X+1,Y+1,EquipoAliado)[source(percept)]& tablero(X+2,Y+2,0)[source(percept)] & not vacioDebajo(X+2,Y+2,0) & BestX = X+2
+						|tablero(X,Y,EquipoAliado)[source(percept)] & tablero(X+1,Y+1,EquipoAliado)[source(percept)]& tablero(X+2,Y+2,EquipoAliado)[source(percept)]& tablero(X+3,Y+3,0)[source(percept)] & not vacioDebajo(X+3,Y+3,0) & BestX = X+3.		
 /*
 	Los movimientos bloquear tienen como objetivo evitar que el contrario coloque 3 o 4 fichas en posiciones que posibiliten el 3 o 4 en raya.
 */
@@ -176,49 +176,49 @@ y haciendo 4 en raya, además de las 3 fichas consecutivas y uno de los extremos 
 4 en raya del contrario.
 */
 /*Movimientos Bloquear*/					
-bloquearCuatroEnRaya(BestX,BestY,EquipoAliado,EquipoEnemigo):-
+bloquearCuatroEnRaya(BestX,EquipoAliado,EquipoEnemigo):-
 						/*Bloquear 4 en raya*/
 						/*Bloquear 4 en raya diagonal*/
-						tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X+1,Y+1,EquipoEnemigo)[source(percept)] & tablero(X+2,Y+2,EquipoEnemigo)[source(percept)] & tablero(X-1,Y-1,EquipoAliado)[source(percept)] & tablero(X+3,Y+3,0)[source(percept)] & not vacioDebajo(X,Y,0) & BestX = X+3 & BestY = Y+3
-						|tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X+1,Y+1,EquipoEnemigo)[source(percept)] & tablero(X+2,Y+2,EquipoEnemigo)[source(percept)] & tablero(X+3,Y+3,EquipoAliado)[source(percept)] & tablero(X-1,Y-1,0)[source(percept)] & not vacioDebajo(X,Y,0) & BestX = X-1 & BestY = Y-1
-						|tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X+1,Y+1,EquipoEnemigo)[source(percept)] & tablero(X+2,Y+2,0)[source(percept)] & tablero(X+3,Y+3,EquipoEnemigo)[source(percept)] & not vacioDebajo(X,Y,0) & BestX = X+2 & BestY = Y+2
-						|tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X+1,Y+1,0)[source(percept)] & tablero(X+2,Y+2,EquipoEnemigo)[source(percept)] & tablero(X+3,Y+3,EquipoEnemigo)[source(percept)] & not vacioDebajo(X,Y,0) & BestX = X+1 & BestY = Y+1
-						|tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X+1,Y+1,EquipoEnemigo)[source(percept)] & tablero(X+2,Y+2,EquipoEnemigo)[source(percept)] & tablero(X-1,Y-1,0)[source(percept)] & not vacioDebajo(X,Y,0) & BestX = X-1 & BestY = Y-1
-						|tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X+1,Y+1,EquipoEnemigo)[source(percept)] & tablero(X+2,Y+2,EquipoEnemigo)[source(percept)] & tablero(X+3,Y+3,0)[source(percept)] & not vacioDebajo(X,Y,0) & BestX = X+3 & BestY = Y+3
+						tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X+1,Y+1,EquipoEnemigo)[source(percept)] & tablero(X+2,Y+2,EquipoEnemigo)[source(percept)] & tablero(X-1,Y-1,EquipoAliado)[source(percept)] & tablero(X+3,Y+3,0)[source(percept)] & not vacioDebajo(X+3,Y+3,0) & BestX = X+3
+						|tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X+1,Y+1,EquipoEnemigo)[source(percept)] & tablero(X+2,Y+2,EquipoEnemigo)[source(percept)] & tablero(X+3,Y+3,EquipoAliado)[source(percept)] & tablero(X-1,Y-1,0)[source(percept)] & not vacioDebajo(X-1,Y-1,0) & BestX = X-1
+						|tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X+1,Y+1,EquipoEnemigo)[source(percept)] & tablero(X+2,Y+2,0)[source(percept)] & tablero(X+3,Y+3,EquipoEnemigo)[source(percept)] & not vacioDebajo(X+2,Y+2,0) & BestX = X+2
+						|tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X+1,Y+1,0)[source(percept)] & tablero(X+2,Y+2,EquipoEnemigo)[source(percept)] & tablero(X+3,Y+3,EquipoEnemigo)[source(percept)] & not vacioDebajo(X+1,Y+1,0) & BestX = X+1
+						|tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X+1,Y+1,EquipoEnemigo)[source(percept)] & tablero(X+2,Y+2,EquipoEnemigo)[source(percept)] & tablero(X-1,Y-1,0)[source(percept)] & not vacioDebajo(X-1,Y-1,0) & BestX = X-1
+						|tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X+1,Y+1,EquipoEnemigo)[source(percept)] & tablero(X+2,Y+2,EquipoEnemigo)[source(percept)] & tablero(X+3,Y+3,0)[source(percept)] & not vacioDebajo(X+3,Y+3,0) & BestX = X+3
 						/*Bloquear 4 en raya vertical*/
-						|tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X,Y+1,EquipoEnemigo)[source(percept)] & tablero(X,Y+2,EquipoEnemigo)[source(percept)] & tablero(X,Y-1,EquipoAliado)[source(percept)] & tablero(X,Y+3,0)[source(percept)] & not vacioDebajo(X,Y,0) & BestX = X & BestY = Y+3
-						|tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X,Y+1,EquipoEnemigo)[source(percept)] & tablero(X,Y+2,EquipoEnemigo)[source(percept)] & tablero(X,Y+3,EquipoAliado)[source(percept)] & tablero(X,Y-1,0)[source(percept)] & not vacioDebajo(X,Y,0) & BestX = X & BestY = Y-1
-						|tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X,Y+1,EquipoEnemigo)[source(percept)] & tablero(X,Y+2,0)[source(percept)] & tablero(X,Y+3,EquipoEnemigo)[source(percept)] & not vacioDebajo(X,Y,0) & BestX = X & BestY = Y+2
-						|tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X,Y+1,0)[source(percept)] & tablero(X,Y+2,EquipoEnemigo)[source(percept)] & tablero(X,Y+3,EquipoEnemigo)[source(percept)] & not vacioDebajo(X,Y,0) & BestX = X & BestY = Y+1
-						|tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X,Y+1,EquipoEnemigo)[source(percept)] & tablero(X,Y+2,EquipoEnemigo)[source(percept)] & tablero(X,Y-1,0)[source(percept)] & not vacioDebajo(X,Y,0) & BestX = X & BestY = Y-1
-						|tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X,Y+1,EquipoEnemigo)[source(percept)] & tablero(X,Y+2,EquipoEnemigo)[source(percept)] & tablero(X,Y+3,0)[source(percept)] & not vacioDebajo(X,Y,0) & BestX = X & BestY = Y+3
+						|tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X,Y+1,EquipoEnemigo)[source(percept)] & tablero(X,Y+2,EquipoEnemigo)[source(percept)] & tablero(X,Y-1,EquipoAliado)[source(percept)] & tablero(X,Y+3,0)[source(percept)] & not vacioDebajo(X,Y+3,0) & BestX = X
+						|tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X,Y+1,EquipoEnemigo)[source(percept)] & tablero(X,Y+2,EquipoEnemigo)[source(percept)] & tablero(X,Y+3,EquipoAliado)[source(percept)] & tablero(X,Y-1,0)[source(percept)] & not vacioDebajo(X,Y-1,0) & BestX = X
+						|tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X,Y+1,EquipoEnemigo)[source(percept)] & tablero(X,Y+2,0)[source(percept)] & tablero(X,Y+3,EquipoEnemigo)[source(percept)] & not vacioDebajo(X,Y+2,0) & BestX = X
+						|tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X,Y+1,0)[source(percept)] & tablero(X,Y+2,EquipoEnemigo)[source(percept)] & tablero(X,Y+3,EquipoEnemigo)[source(percept)] & not vacioDebajo(X,Y+1,0) & BestX = X
+						|tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X,Y+1,EquipoEnemigo)[source(percept)] & tablero(X,Y+2,EquipoEnemigo)[source(percept)] & tablero(X,Y-1,0)[source(percept)] & not vacioDebajo(X,Y-1,0) & BestX = X
+						|tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X,Y+1,EquipoEnemigo)[source(percept)] & tablero(X,Y+2,EquipoEnemigo)[source(percept)] & tablero(X,Y+3,0)[source(percept)] & not vacioDebajo(X,Y+3,0) & BestX = X
 						/*Bloquear 4 en raya horizontal*/
-						|tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X+1,Y,EquipoEnemigo)[source(percept)] & tablero(X+2,Y,EquipoEnemigo)[source(percept)] & tablero(X-1,Y,EquipoAliado)[source(percept)] & tablero(X+3,Y,0)[source(percept)] & not vacioDebajo(X,Y,0) & BestX = X+3 & BestY = Y
-						|tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X+1,Y,EquipoEnemigo)[source(percept)] & tablero(X+2,Y,EquipoEnemigo)[source(percept)] & tablero(X+3,Y,EquipoAliado)[source(percept)] & tablero(X-1,Y,0)[source(percept)] & not vacioDebajo(X,Y,0) & BestX = X-1 & BestY = Y
-						|tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X+1,Y,EquipoEnemigo)[source(percept)] & tablero(X+2,Y,0)[source(percept)] & tablero(X+3,Y,EquipoEnemigo)[source(percept)] & not vacioDebajo(X,Y,0) & BestX = X+2 & BestY = Y
-						|tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X+1,Y,0)[source(percept)] & tablero(X+2,Y,EquipoEnemigo)[source(percept)] & tablero(X+3,Y,EquipoEnemigo)[source(percept)] & not vacioDebajo(X,Y,0) & BestX = X+1 & BestY = Y
-						|tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X+1,Y,EquipoEnemigo)[source(percept)] & tablero(X+2,Y,EquipoEnemigo)[source(percept)] & tablero(X-1,Y,0)[source(percept)] & not vacioDebajo(X,Y,0) & BestX = X-1 & BestY = Y
-						|tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X+1,Y,EquipoEnemigo)[source(percept)] & tablero(X+2,Y,EquipoEnemigo)[source(percept)] & tablero(X+3,Y,0)[source(percept)] & not vacioDebajo(X,Y,0) & BestX = X+3 & BestY = Y.
+						|tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X+1,Y,EquipoEnemigo)[source(percept)] & tablero(X+2,Y,EquipoEnemigo)[source(percept)] & tablero(X-1,Y,EquipoAliado)[source(percept)] & tablero(X+3,Y,0)[source(percept)] & not vacioDebajo(X+3,Y,0) & BestX = X+3
+						|tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X+1,Y,EquipoEnemigo)[source(percept)] & tablero(X+2,Y,EquipoEnemigo)[source(percept)] & tablero(X+3,Y,EquipoAliado)[source(percept)] & tablero(X-1,Y,0)[source(percept)] & not vacioDebajo(X-1,Y,0) & BestX = X-1
+						|tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X+1,Y,EquipoEnemigo)[source(percept)] & tablero(X+2,Y,0)[source(percept)] & tablero(X+3,Y,EquipoEnemigo)[source(percept)] & not vacioDebajo(X+2,Y,0) & BestX = X+2
+						|tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X+1,Y,0)[source(percept)] & tablero(X+2,Y,EquipoEnemigo)[source(percept)] & tablero(X+3,Y,EquipoEnemigo)[source(percept)] & not vacioDebajo(X+1,Y,0) & BestX = X+1
+						|tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X+1,Y,EquipoEnemigo)[source(percept)] & tablero(X+2,Y,EquipoEnemigo)[source(percept)] & tablero(X-1,Y,0)[source(percept)] & not vacioDebajo(X-1,Y,0) & BestX = X-1
+						|tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X+1,Y,EquipoEnemigo)[source(percept)] & tablero(X+2,Y,EquipoEnemigo)[source(percept)] & tablero(X+3,Y,0)[source(percept)] & not vacioDebajo(X+3,Y,0) & BestX = X+3.
 /*
 	El predicado bloquearTresEnRaya busca 2 fichas del contrario consecutivas para al colocar la siguiente ficha en una posicion que o bien evite que el contrario consiga el 3 en raya
 o "bloquee" uno de los extremos para evitar que tenga 2 posibilidades de completar el 4 en raya.
 */
-bloquearTresEnRaya(BestX,BestY,EquipoAliado,EquipoEnemigo):-
+bloquearTresEnRaya(BestX,EquipoAliado,EquipoEnemigo):-
 						/*Bloquear 3 en raya diagonal*/
-						 tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X+1,Y+1,0)[source(percept)] & tablero(X+2,Y+2,EquipoEnemigo)[source(percept)]  & BestX = X+1 & BestY = Y+1
-						|tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X-1,Y+1,0)[source(percept)] & tablero(X-2,Y+2,EquipoEnemigo)[source(percept)]  & BestX = X-1 & BestY = Y+1
-						|tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X+1,Y+1,EquipoEnemigo)[source(percept)] & tablero(X+2,Y+2,0)[source(percept)]  & BestX = X+2 & BestY = Y+2
-						|tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X+1,Y+1,EquipoEnemigo)[source(percept)] & tablero(X-1,Y-1,0)[source(percept)] & not vacioDebajo(X,Y,0) & BestX = X-1 & BestY = Y-1
-						|tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X-1,Y+1,EquipoEnemigo)[source(percept)] & tablero(X-2,Y+2,0)[source(percept)]  & BestX = X-2 & BestY = Y+2
-						|tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X-1,Y+1,EquipoEnemigo)[source(percept)] & tablero(X+1,Y-1,0)[source(percept)]  & BestX = X+1 & BestY = Y-1
+						 tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X+1,Y+1,0)[source(percept)] & tablero(X+2,Y+2,EquipoEnemigo)[source(percept)] & not vacioDebajo(X+1,Y+1,0) & BestX = X+1
+						|tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X-1,Y+1,0)[source(percept)] & tablero(X-2,Y+2,EquipoEnemigo)[source(percept)] & not vacioDebajo(X-1,Y+1,0) & BestX = X-1
+						|tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X+1,Y+1,EquipoEnemigo)[source(percept)] & tablero(X+2,Y+2,0)[source(percept)] & not vacioDebajo(X+2,Y+2,0) & BestX = X+2
+						|tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X+1,Y+1,EquipoEnemigo)[source(percept)] & tablero(X-1,Y-1,0)[source(percept)] & not vacioDebajo(X-1,Y-1,0) & BestX = X-1
+						|tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X-1,Y+1,EquipoEnemigo)[source(percept)] & tablero(X-2,Y+2,0)[source(percept)] & not vacioDebajo(X-2,Y+2,0) & BestX = X-2
+						|tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X-1,Y+1,EquipoEnemigo)[source(percept)] & tablero(X+1,Y-1,0)[source(percept)] & not vacioDebajo(X+1,Y-1,0) & BestX = X+1
 						/*Bloquear 3 en raya vertical*/
-						|tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X,Y+1,0)[source(percept)] & tablero(X,Y+2,EquipoEnemigo)[source(percept)]  & BestX = X & BestY = Y+1
-						|tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X,Y+1,EquipoEnemigo)[source(percept)] & tablero(X,Y+2,0)[source(percept)]  & BestX = X & BestY = Y+2
-						|tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X,Y+1,EquipoEnemigo)[source(percept)] & tablero(X,Y-1,0)[source(percept)]  & BestX = X & BestY = Y-1
+						|tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X,Y+1,0)[source(percept)] & tablero(X,Y+2,EquipoEnemigo)[source(percept)] & not vacioDebajo(X,Y+1,0) & BestX = X
+						|tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X,Y+1,EquipoEnemigo)[source(percept)] & tablero(X,Y+2,0)[source(percept)] & not vacioDebajo(X,Y+2,0) & BestX = X
+						|tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X,Y+1,EquipoEnemigo)[source(percept)] & tablero(X,Y-1,0)[source(percept)] & not vacioDebajo(X,Y-1,0) & BestX = X
 						/*Bloquear 3 en raya horizontal*/                  
-						|tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X+1,Y,0)[source(percept)] & tablero(X+2,Y,EquipoEnemigo)[source(percept)]  & BestX = X+1 & BestY = Y
-						|tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X+1,Y,EquipoEnemigo)[source(percept)] & tablero(X+2,Y,0)[source(percept)]  & BestX = X+2 & BestY = Y
-						|tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X+1,Y,EquipoEnemigo)[source(percept)] & tablero(X-1,Y,0)[source(percept)]  & BestX = X-1 & BestY = Y.
+						|tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X+1,Y,0)[source(percept)] & tablero(X+2,Y,EquipoEnemigo)[source(percept)] & not vacioDebajo(X+1,Y,0) & BestX = X+1
+						|tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X+1,Y,EquipoEnemigo)[source(percept)] & tablero(X+2,Y,0)[source(percept)] & not vacioDebajo(X+2,Y,0) & BestX = X+2
+						|tablero(X,Y,EquipoEnemigo)[source(percept)] & tablero(X+1,Y,EquipoEnemigo)[source(percept)] & tablero(X-1,Y,0)[source(percept)] & not vacioDebajo(X-1,Y,0) & BestX = X-1.
 
 //Modo perder
 /*
@@ -227,21 +227,21 @@ que no queden fichas consecutivas, de forma que colocara 2 seguidas hasta que no
 una ficha de forma aleatoria perdiendo asi la partida.
 La estrategia se compone de negar los predicados implementados para colocar 1, 2, 3 y 4 en raya en la estrategia a "Ganar" y la colocaión de forma aleatoria de una ficha en el tablero.
 */
-colocarPerder(X,Y,EquipoAliado,EquipoEnemigo):- 
+colocarPerder(X,EquipoAliado,EquipoEnemigo):- 
 							//Si es el primer turno de la partida, coloca en cualquier sitio libre
-							tablero(X,Y,0)[source(percept)] & tablero([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])[source(percept)].
-colocarPerder(X,Y,EquipoAliado,EquipoEnemigo):-
-							 tablero(X,Y,0)[source(percept)] & not unoEnRaya(X,Y,EquipoAliado) & not bloquearCuatroEnRaya(BestX,BestY,EquipoAliado,EquipoEnemigo)
-							|tablero(X,Y,0)[source(percept)] & not unoEnRaya(X,Y,EquipoAliado) & not bloquearTresEnRaya(BestX,BestY,EquipoAliado,EquipoEnemigo)
+							tablero([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])[source(percept)] & X=7.
+colocarPerder(X,EquipoAliado,EquipoEnemigo):-
+							 tablero(X,Y,0)[source(percept)] & not unoEnRaya(X,Y,EquipoAliado) & not bloquearCuatroEnRaya(X,EquipoAliado,EquipoEnemigo)
+							|tablero(X,Y,0)[source(percept)] & not unoEnRaya(X,Y,EquipoAliado) & not bloquearTresEnRaya(X,EquipoAliado,EquipoEnemigo)
 							
-							|tablero(X,Y,0)[source(percept)] & not dosEnRaya(X,Y,EquipoAliado )& not bloquearCuatroEnRaya(BestX,BestY,EquipoAliado,EquipoEnemigo)
-							|tablero(X,Y,0)[source(percept)] & not dosEnRaya(X,Y,EquipoAliado) & not bloquearTresEnRaya(BestX,BestY,EquipoAliado,EquipoEnemigo)
+							|tablero(X,Y,0)[source(percept)] & not dosEnRaya(X,Y,EquipoAliado )& not bloquearCuatroEnRaya(X,EquipoAliado,EquipoEnemigo)
+							|tablero(X,Y,0)[source(percept)] & not dosEnRaya(X,Y,EquipoAliado) & not bloquearTresEnRaya(X,EquipoAliado,EquipoEnemigo)
 							
-							|tablero(X,Y,0)[source(percept)] & not tresEnRaya(X,Y,EquipoAliado) & not bloquearCuatroEnRaya(BestX,BestY,EquipoAliado,EquipoEnemigo)
-							|tablero(X,Y,0)[source(percept)] & not tresEnRaya(X,Y,EquipoAliado) & not bloquearTresEnRaya(BestX,BestY,EquipoAliado,EquipoEnemigo)
+							|tablero(X,Y,0)[source(percept)] & not tresEnRaya(X,Y,EquipoAliado) & not bloquearCuatroEnRaya(X,EquipoAliado,EquipoEnemigo)
+							|tablero(X,Y,0)[source(percept)] & not tresEnRaya(X,Y,EquipoAliado) & not bloquearTresEnRaya(X,EquipoAliado,EquipoEnemigo)
 
-							|tablero(X,Y,0)[source(percept)] & not cuatroEnRaya(X,Y,EquipoAliado) & not bloquearCuatroEnRaya(BestX,BestY,EquipoAliado,EquipoEnemigo)
-							|tablero(X,Y,0)[source(percept)] & not cuatroEnRaya(X,Y,EquipoAliado) & not bloquearTresEnRaya(BestX,BestY,EquipoAliado,EquipoEnemigo)
+							|tablero(X,Y,0)[source(percept)] & not cuatroEnRaya(X,Y,EquipoAliado) & not bloquearCuatroEnRaya(X,EquipoAliado,EquipoEnemigo)
+							|tablero(X,Y,0)[source(percept)] & not cuatroEnRaya(X,Y,EquipoAliado) & not bloquearTresEnRaya(X,EquipoAliado,EquipoEnemigo)
 
 							|tablero(X,Y,0)[source(percept)] & not unoEnRaya(X,Y,EquipoAliado)
 							|tablero(X,Y,0)[source(percept)] & not dosEnRaya(X,Y,EquipoAliado)
@@ -260,22 +260,28 @@ conocerEquipo(player2):- .abolish(equipoAliado(_)) & .asserta(equipoAliado(2)) &
 
 /* Plans */
 
+//El jugador inicia averiguando cual es su equipo y a continuacion ejecuta !esperar
 +!start <- .my_name(Self); ?conocerEquipo(Self); !esperar.
 
+//El jugador espera a que sea su turno para jugar
 +!esperar : .my_name(Self) <- .wait(turno(Self)[source(percept)]); !jugar.
 
+//Si el modo es jugarAGanar, el jugador pregunta a su base de conocimiento cual es la mejor posicion para colocar una ficha
 +!jugar : estrategia(jugarAGanar)[source(percept)] & equipoAliado(EquipoAliado) & equipoEnemigo(EquipoEnemigo)
-					<- //preguntar por el valor de X e Y  al belief 
-						?colocar(BestX,BestY,EquipoAliado,EquipoEnemigo);
+					<- //Pregunta por el valor de X al belief 
+						?colocar(BestX,EquipoAliado,EquipoEnemigo);
 						//Coloca ficha en el tablero
-						put(BestX,BestY);	
+						put(BestX);
+						//Ejecuta el plan "esperar"
 						!esperar.
 
+//Si el modo es jugarAPerder, el jugador pregunta a su base de conocimiento cual es la peor posicion para colocar una ficha
 +!jugar : estrategia(jugarAPerder)[source(percept)]  & equipoAliado(EquipoAliado) & equipoEnemigo(EquipoEnemigo)
-					<- //preguntar por el valor de X e Y  al belief 
-						?colocarPerder(BestX,BestY,EquipoAliado,EquipoEnemigo);
+					<- //Pregunta por el valor de X e Y al belief 
+						?colocarPerder(BestX,EquipoAliado,EquipoEnemigo);
 						//Coloca ficha en el tablero
-						put(BestX,BestY);
+						put(BestX);
+						//Ejecuta el plan "esperar"
 						!esperar.
 
 //Plan por defecto para otros casos, de este modo se trata de evitar ser engañado.
