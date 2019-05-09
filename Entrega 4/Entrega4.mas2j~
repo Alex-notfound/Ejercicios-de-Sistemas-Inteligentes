@@ -1,0 +1,14 @@
+MAS entrega4 {
+
+    infrastructure: Centralised
+
+	environment: Blackboard
+	
+    agents:
+
+	player1;
+	
+	player2;
+}
+
+

@@ -65,7 +65,7 @@ public class Blackboard extends Environment implements Runnable {
 	private int empates = 0;
 	private int numPartidas = 0;
 	// Almacena quien es el que empezo el primero en la ultima partida
-	private int turnoUltimaPartida = 0;
+	private int turnoUltimaPartida = 1;
 	
 	// Modos de juego
 	private int modoJuego = 0;
@@ -77,9 +77,9 @@ public class Blackboard extends Environment implements Runnable {
 	
 	private int max_partidas = 0; 
 	// Numero de partidas normal
-	private final int MAX_PARTIDAS = 6;
+	private final int MAX_PARTIDAS = 10;
 	// Numero de partidas en caso de empate
-	private final int MAX_PARTIDAS_RONDAS_EXTRA = 8;
+	private final int MAX_PARTIDAS_RONDAS_EXTRA = 6;
 	
 	// Se utiliza para mantener un estado durante un tiempo controlado
 	private Timer timer;
@@ -105,7 +105,7 @@ public class Blackboard extends Environment implements Runnable {
 		turno = TURNO_PLAYER1;
 		estado = JUGANDO;
 		max_partidas = MAX_PARTIDAS;
-		modoJuego = MODO_JUGAR_A_GANAR;
+		modoJuego = MODO_JUGAR_A_PERDER;
 		view.setModoJuego(modoJuego);
 		
 		start();
@@ -135,27 +135,15 @@ public class Blackboard extends Environment implements Runnable {
 		
         try {
 			if (estado == JUGANDO) {
-					if (action.getFunctor().equals("ponerTurno")) {
-						String x = (String)((Atom)action.getTerm(0)).toString();
-						if(x.equals("player1")) {
-							turno = TURNO_PLAYER1;
-						} else {
-							turno = TURNO_PLAYER2;
-						}
-						// Anotamos quien empieza
-						turnoUltimaPartida = turno;
-						view.setJugadorTurnoInicial(turno);
-					} else if (action.getFunctor().equals("put")) {
+					if (action.getFunctor().equals("put")) {
 						int x = (int)((NumberTerm)action.getTerm(0)).solve();
 						
 						try {
 							if (ag.equals("player1")) {
 								// mover a personaje1
 								model.put(PIEZA_P1,x);
-								view.personaje1.vibrar();
 							} else if (ag.equals("player2") ) {							
 								model.put(PIEZA_P2,x);
-								view.personaje2.vibrar();
 							}
 						} catch (Exception ex) {
 						}
@@ -202,11 +190,11 @@ public class Blackboard extends Environment implements Runnable {
 						} else {
 							// Si han quedado en empate
 							// vamos con dos rondas extras en que se juega
-							// a perder
+							// a ganar
 							ganador = EMPATE;
 							max_partidas = MAX_PARTIDAS_RONDAS_EXTRA;
 							// Jugar a perder
-							modoJuego = MODO_JUGAR_A_PERDER;
+							modoJuego = MODO_JUGAR_A_GANAR;
 							view.setModoJuego(modoJuego);
 						}
 						// Si es la ultima partida finalizamos el juego
@@ -315,7 +303,7 @@ public class Blackboard extends Environment implements Runnable {
 	 */
 	 private void anotar(int tipo_estado) {
 		 // Actualiza la puntuacion de los jugadores
-		 if (modoJuego == MODO_JUGAR_A_GANAR) {
+		 if (modoJuego == MODO_JUGAR_A_PERDER) {
 			 switch (tipo_estado) {
 				  case P1_GANADOR:
 						if (turnoUltimaPartida == TURNO_PLAYER1) {
@@ -336,20 +324,20 @@ public class Blackboard extends Environment implements Runnable {
 						p2_wins++; 
 					  break; 
 			 }
-		 } else if (modoJuego == MODO_JUGAR_A_PERDER) {
+		 } else if (modoJuego == MODO_JUGAR_A_GANAR) {
 			 switch (tipo_estado) {
 				  case P1_GANADOR:
 						if (turnoUltimaPartida == TURNO_PLAYER1) {
-							p1_wins+=2;
+							p1_wins+=1;
 						} else {
-							p1_wins+=1;	
+							p1_wins+=2;
 						}
 						break;
 				  case P2_GANADOR: 
 					  if (turnoUltimaPartida == TURNO_PLAYER2) {
-						  p2_wins+=2; 
-					  } else {
 						  p2_wins+=1;
+					  } else {
+						  p2_wins+=2;
 					  }
 					  break;
 				  case EMPATE:
@@ -383,7 +371,7 @@ public class Blackboard extends Environment implements Runnable {
 			}
 		} 
 		// Comprueba si intenta poner una ficha en una columna que esta
-		// llena, en cuyo caso perdería de forma instantanea
+		// llena, en cuyo caso perderia de forma instantanea
 		else if (ultimaFicha.getY() == -1) {
 			if (ultimaFicha.getTipo() == PIEZA_P1) {
 				logger.info("player1 ha puesto ficha en una columna llena");
@@ -538,24 +526,29 @@ public class Blackboard extends Environment implements Runnable {
 	}
     
 	private int pasarTurno() {
-		if (turno == TURNO_NO_ESPECIFICADO) return TURNO_NO_ESPECIFICADO;
+		//if (turno == TURNO_NO_ESPECIFICADO) return TURNO_NO_ESPECIFICADO;
 		return (turno == TURNO_PLAYER1?TURNO_PLAYER2:TURNO_PLAYER1);
 	}
 	
     /** creates the agents perception based on the BlackboardModel */
     void updatePercepts() {
-		// Añadimos el modelo del mundo
+		// Sumamos el modelo del mundo
 		StringBuffer sb = new StringBuffer("tablero([");
+		int v = 0;
 		for (int i = 0; i < GSize; i++) {
 			for (int j = 0; j < GSize; j++) {
+				v = 0;
 				sb.append(model.getData()[j][i]);
 				sb.append(",");
+				if (model.getData()[j][i] > 0) {v = model.getData()[j][i]-15;};
+				addPercept(Literal.parseLiteral("tablero("+j+","+i+","+v+")"));
 			}
 		}
 		sb.deleteCharAt(sb.length()-1);
 		sb.append("])");
 		Literal l = Literal.parseLiteral(sb.toString());
-		addPercept(l);
+		//addPercept(l);
+		
 		// Si estamos jugando y se ha asignado ya algun turno
 		if (estado == JUGANDO && turno != TURNO_NO_ESPECIFICADO) {
 			if (turno == TURNO_PLAYER1) {

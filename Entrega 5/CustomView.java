@@ -169,7 +169,7 @@ import javax.swing.JFrame;
 		
 		BufferedImage bufferedImage = null;;
 		BufferedImage resultado = null;
-	/*		
+			
 		if (estado != ESTADO_FIN_JUEGO) {
 			bufferedImage = imageToBufferedImage(fondo[0].getImage());
 			int matriz[][] = new int[bufferedImage.getWidth()][bufferedImage
@@ -204,7 +204,7 @@ import javax.swing.JFrame;
 		
 		g.drawImage(fondoFinal.getImage(),
 					0, 52, this);
-*/					
+					
 		// Dibujo player 1 y player 2
 		Font font = new Font("Serif", Font.BOLD, 50);
 		g.setFont(font);
