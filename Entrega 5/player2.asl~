@@ -16,7 +16,8 @@ colocar(BestX,EquipoAliado,EquipoEnemigo):-
 							|tresEnRaya(BestX,EquipoAliado)
 							|dosEnRaya(BestX,EquipoAliado)
      						|unoEnRaya(BestX,EquipoAliado)
-							//Coloca en una posicion cualquiera que este libre
+							//Movimientos empezar de segundo
+							|tablero(4,7,0)[source(percept)] & BestX = 4
 							|tablero(X,Y,0)[source(percept)] & not vacioDebajo(X,Y,0) & BestX = X.
 							
 //Si en la columna en la que se quiere colocar no hay ninguna ficha, devuelve 1 en el tercer parametro
@@ -203,8 +204,8 @@ bloquearTresEnRaya(BestX,EquipoAliado,EquipoEnemigo):-
 /*Busca una posicion tratando de evitar que este en linea con una ficha aliada y de no bloquear posibles alineaciones enemigas, pero de no ser posible
 tratara de alinear con el menor numero de fichas aliadas posibles */
 colocarPerder(X,EquipoAliado,EquipoEnemigo) :-
-							tablero(X,Y,0)[source(percept)] & not unoEnRaya(X,EquipoAliado) & not bloquearCuatroEnRaya(X,EquipoAliado,EquipoEnemigo)
-							|tablero(X,Y,0)[source(percept)] & not unoEnRaya(X,EquipoAliado) & not bloquearTresEnRaya(X,EquipoAliado,EquipoEnemigo)
+							tablero(X,Y,0)[source(percept)] & not unoEnRaya(X,EquipoAliado) & not bloquearCuatroEnRaya(X,EquipoAliado,EquipoEnemigo) & .print("TGUS")
+							|tablero(X,Y,0)[source(percept)] & not unoEnRaya(X,EquipoAliado) & not bloquearTresEnRaya(X,EquipoAliado,EquipoEnemigo) & .print("asdada")
 							
 							|tablero(X,Y,0)[source(percept)] & not dosEnRaya(X,EquipoAliado )& not bloquearCuatroEnRaya(X,EquipoAliado,EquipoEnemigo)
 							|tablero(X,Y,0)[source(percept)] & not dosEnRaya(X,EquipoAliado) & not bloquearTresEnRaya(X,EquipoAliado,EquipoEnemigo)
