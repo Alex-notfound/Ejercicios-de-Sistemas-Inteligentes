@@ -1,0 +1,16 @@
+MAS proyecto {
+
+    infrastructure: Centralised
+
+    agents:
+	
+        pepe;
+
+        jose;
+		
+		clara;
+		
+		blanca;
+
+}
+

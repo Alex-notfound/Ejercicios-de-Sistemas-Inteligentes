@@ -1,0 +1,14 @@
+MAS greetingSimple {
+
+    infrastructure: Centralised
+
+    agents:
+	
+        pepe;
+
+        jose;
+		
+		clara;
+
+}
+
