@@ -1,0 +1,42 @@
+ENUNCIADO ENTREGA FINAL
+
+Construir un programa AgentSpeak que compile en Jason y que de soporte una conversación entre los agentes: Jose, Pepe, Clara y Blanca
+
+Escenario:
+
+Al comienzo Jose, Clara y Blanca conversan sobre sus cosas, cuando aparece Pepe y se inicia la archiconocida conversación:
+Jose: Hola don Pepito
+
+Pepito: Hola don Jose
+
+Jose: Paso usted por mi casa
+
+Pepito: Por su casa yo pase
+
+Jose: Vio usted a mi abuela
+
+Pepito: A su abuela yo la vi
+
+Jose: Adios don Pepito
+
+Pepito: Adios don Jose.
+
+Durante la conversación Clara intenta interrumpir, pero su madre Blanca se lo impide regañándola convenientemente.
+Terminado el saludo Pepe se dirige a Clara indicándole que va a hacer un truco de magia (el numero del mago de la entrega 2), pero de la siguiente forma: 
+Pepito: Clara piensa un número entre 20 y 40. Ahora multiplícalo por 100.
+
+Pepito: Muy bien Clara, lo estás haciendo muy bien. A continuación piensa un número entre 50 y 60 y sumaselo al resultado anterior. Lo tienes; muy bien ahora resta 101 y dime el resultado.
+
+Clara: El resultado es .....
+
+Pepito: Pues verás Clara el primer numero que pensaste es ... y el segundo ....
+
+Clara: Bravo, bravo, más, más. Mama, tio Jose habeis visto lo que ha hecho
+
+La comunicación entre agentes para llevar a cabo las conversaciones se realizarán mediante el envio de objetivos de la forma digoQue(String) => utilizando la directiva achieve 
+
+Las interrupciones de Clara se realizarán mediante el envió de mensajes de la forma: queja(String), burla(String)
+
+Las operaciones que hará Clara serán preprocesadas del mismo modo que en la Entrega2, ya que durante las pruebas se modificarán las cantidades con objeto de verificar que el preprocesamiento sea correcto.
+
+Se debe tener en cuenta que desde el punto de vista de la programación en AgentSpeak es posible atender simultaneamente las demandas de dos o más agentes, por lo que la visualición de lo que ocurre debe ser modificada adecuadamente para adaptarse a esa nueva situación.
