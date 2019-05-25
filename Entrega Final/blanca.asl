@@ -19,14 +19,14 @@ answer(clara,"Gaznapiro, bocachancla, callate .....","Eres una maleducada") :-
 
 /* Plans */
 
-+!queja(Frase)[source(Sender)] 
-	: answer(Sender, Frase, Answer) & .all_names(All) & .member(Sender,All) <- .broadcast(achieve,digoQue(Answer)).
++!queja(Frase)[source(Sender)] : answer(Sender, Frase, Answer) & .all_names(All) & .member(Sender,All) <- 
+		.broadcast(achieve,impedir(Answer)).
 
-+!burla(Frase)[source(Sender)] 
-	: answer(Sender, Frase, Answer) & .all_names(All) & .member(Sender,All) <- .broadcast(achieve,digoQue(Answer)).
++!burla(Frase)[source(Sender)] : answer(Sender, Frase, Answer) & .all_names(All) & .member(Sender,All) <- 
+		.broadcast(achieve,impedir(Answer)).
 
 +!digoQue(Frase)[source(Sender)] : answer(Sender, Frase, Answer) & .all_names(All) & .member(Sender,All) & .member(jose,All) <- 
-				.broadcast(achieve,digoQue(Answer)).
+		.broadcast(achieve,digoQue(Answer)).
 	
 +!digoQue(Frase):true.
 +!queja(Frase):true.

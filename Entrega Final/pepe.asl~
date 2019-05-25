@@ -19,9 +19,17 @@ answer(jose, "Adios don Pepito", "Adios don Jose"):-
 		.wait(1000);
 		.broadcast(achieve,digoQue(Answer)).
 
-+!adios[source(jose)]: true <- 
-	.abolish(Percepts[source(jose)]).
-	
-+!queja(Frase):true.
++!adios[source(jose)] : .all_names(All) & .member(clara,All)  <- 
+		.wait(1000);
+		.send(clara,achieve,digoQue("calcular"));
+		.print("Clara piensa un número entre 20 y 40. Ahora multiplícalo por 100");
+		.send(clara,achieve,digoQue("Clara piensa un número entre 20 y 40. Ahora multiplícalo por 100"));
+		.wait(2000);
+		.print("Muy bien Clara, lo estás haciendo muy bien. A continuación piensa un número entre 50 y 60 y sumaselo al resultado anterior. Lo tienes; muy bien ahora resta 101 y dime el resultado");
+		.send(clara,achieve,digoQue("Muy bien Clara, lo estás haciendo muy bien. A continuación piensa un número entre 50 y 60 y sumaselo al resultado anterior. Lo tienes; muy bien ahora resta 101 y dime el resultado")).
 
-+!burla(Frase):true.
++!digoQue(Frase):true.
++!burla(Frase) <- .suspend(digoQue(S)); .wait({+!impedir(X)}); .resume(digoQue(S)).
++!queja(Frase) <- .suspend(digoQue(S)); .wait({+!impedir(X)}); .resume(digoQue(S)).
++!impedir(Frase):true.
++Default[source(A)]: not A=self <- .print("Perdona, no te he entendido").
