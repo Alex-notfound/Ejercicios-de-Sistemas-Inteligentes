@@ -22,7 +22,7 @@ answer(blanca,"Saca todo dieces","Me alegro") :-
 +!start : .all_names(All) & .member(blanca,All) & .member(clara,All)<- 
 	.print("Que tal en la escuela, Clara?");
 	.send(clara,achieve,digoQue("Que tal en la escuela, Clara?"));
-	//.wait(1000);
+	.wait(500);
 	!saludarAPepe.
 	
 +!saludarAPepe : .all_names(All) & .member(pepe,All) <-
@@ -30,7 +30,7 @@ answer(blanca,"Saca todo dieces","Me alegro") :-
 	.broadcast(achieve,digoQue("Hola don Pepito")).
 	
 +!digoQue(Frase)[source(Sender)] : answer(Sender, Frase, Answer) & .all_names(All) & .member(Sender,All)<-
-	//.wait(1000);
+	.wait(500);
 	.broadcast(achieve,digoQue(Answer)).
 	
 +!digoQue("Adios don Jose")[source(pepe)]: .all_names(All) & .member(pepe,All) <-
