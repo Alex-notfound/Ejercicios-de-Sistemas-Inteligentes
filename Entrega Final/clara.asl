@@ -3,6 +3,7 @@
 /* Initial beliefs and rules */
 
 calcular(0).
+listaResultado([]).
 queja("Estoy cansada, vamonos ...").
 queja("Tengo hambre y quiero un helado").
 burla("Brlllllll ...").
@@ -13,18 +14,19 @@ answer(pepe, String, "Entro"):-
 	procesa(String) &
 	.print("Acabe de procesar").
 	
-procesa(String) :- calcular(1) &
+procesa(String) :- 
+	calcular(1) &
 	leerOperaciones(String, ListaOp) &
 	.print("Entro a realizar Operaciones") &
 	realizaOperaciones(ListaOp) &
 	.print("Salgo de realizar operaciones").
 
-leerOperaciones("", []).	
+leerOperaciones("", []).
+leerOperaciones(" ", []).
 leerOperaciones(String, [Op|RestoOp]) :-
 	piensa(String, Op, RestoString) &
 	.print("Lei piensa y devuelve: ", RestoString) &
-	leerOperaciones(RestoString, RestoOp).
-	
+	leerOperaciones(RestoString, RestoOp).	
 leerOperaciones(String, [Op|RestoOp]) :-
 	.print("Lei... Paso a producto con: ", String) &
 	producto(String, Op, RestoString) &
@@ -33,13 +35,8 @@ leerOperaciones(String, [Op|RestoOp]) :-
 leerOperaciones(String, [Op|RestoOp]) :-
 	suma(String, Op, RestoString) &
 	leerOperaciones(RestoString,RestoOp).
-	
 leerOperaciones(String, [Op|RestoOp]) :-
 	resta(String, Op, RestoString) &
-	leerOperaciones(RestoString,RestoOp).
-/*
-leerOperaciones(String, RestoOp) :-
-	.delete(0,1,String,RestoString) &
 	leerOperaciones(RestoString,RestoOp).
 	
 /*leerOperaciones(String, [Op|RestoOp]) :-
@@ -64,31 +61,16 @@ producto(String, prod(N), RestoString) :-
 	.print("PRODUCTO - RestoString: ", RestoString, " N: ", N).
 
 suma(String, add(N), RestoString) :-
-	.substring("Suma ", String, Pos) &
-	.length("Suma ", Length) &
-	.delete(0, Pos+Length, String, RestString) &
-	valor(RestString, N, RestoString).
-suma(String, add(N), RestoString) :-
-	.substring("Sumale ", String, Pos) &
-	.length("Sumale ", Length) &
-	.delete(0, Pos+Length, String, RestString) &
-	valor(RestString, N, RestoString).
-suma(String, add(N), RestoString) :-
-	.substring("suma ", String, Pos) &
-	.length("suma ", Length) &
-	.delete(0, Pos+Length, String, RestString) &
-	valor(RestString, N, RestoString).
-suma(String, add(N), RestoString) :-
-	.substring("sumale ", String, Pos) &
-	.length("sumale ", Length) &
+	.substring("sumaselo a", String, Pos) &
+	.length("sumaselo a", Length) &
 	.delete(0, Pos+Length, String, RestString) &
 	valor(RestString, N, RestoString).
 	
 valor(String, N, RestoString):-
-	.substring("edad", String, Pos) &
-	.length("edad", Length) &
+	.substring("resultado anterior", String, Pos) &
+	.length("resultado anterior", Length) &
 	.delete(0, Pos+Length, String, RestoString) &
-	edad(N).
+	resultado(N).
 valor(String, N, RestoString):-
 	extraeNumero(String, Numero) &
 	.length(Numero, Length) &
@@ -117,27 +99,38 @@ posicion("7").
 posicion("8").
 posicion("9").
 
+addResultado(N,L,[N|L]).
+cogerResultado([N2|N1], N2).
+
 realizaOperaciones([]).
-realizaOperaciones([piensa(N,Ndos)|Tl]):-
+realizaOperaciones([piensa(N,Ndos)|Tl]) :-
 	Random = Ndos-N &
 	.print("Pienso un numero entre ", N, " y ", Ndos) &
+	listaResultado(L) &
+	NumeroPensado=math.round(math.random(Random))+N &
+	addResultado(NumeroPensado,L,LFinal) &
+	.abolish(listaResultado(_)) &
+	.asserta(listaResultado(LFinal)) &
+	.print("ALEATORIO ES: ", NumeroPensado)&
+	realizaOperaciones(Tl).
+realizaOperaciones([prod(N)|Tl]):-
+	listaResultado(L) &
+	cogerResultado(L,Res) &
+	.print("Hago producto de ", Res, " y ", N) &
 	.abolish(resultado(_)) &
-	.asserta(resultado(math.round(math.random(Random))+N)) &
+	.asserta(resultado(N*Res)) &
+	.print("PRODUCTO ES: ", N*Res)&
 	realizaOperaciones(Tl).
 	
-realizaOperaciones([add(numero(N))|Tl]):-
-	.abolish(numero(_)) &
-	.asserta(numero(N)) &
-	realizaOperaciones(Tl).
 realizaOperaciones([add(N)|Tl]):-
 	resultado(Res) &
 	.abolish(resultado(_)) &
 	.asserta(resultado(N+Res)) &
 	realizaOperaciones(Tl).
-realizaOperaciones([prod(N)|Tl]):-
-	numero(Res) &
+realizaOperaciones([resta(N)|Tl]):-
+	resultado(Res) &
 	.abolish(resultado(_)) &
-	.asserta(resultado(N*Res)) &
+	.asserta(resultado(N-Res)) &
 	realizaOperaciones(Tl).
 	
 /* Initial goals */
@@ -152,7 +145,10 @@ realizaOperaciones([prod(N)|Tl]):-
 
 +!digoQue(Frase)[source(pepe)] : .count(queja(_),0) & .all_names(Agents) & .member(jose,Agents) & .member(pepe,Agents) & burla(B) 
 	<- .print(B);.broadcast(achieve,burla(B));  -burla(B).
-	
+
++!digoQue(Frase)[source(pepe)] : calcular(1) & answer(pepe, Frase, Answer) & .all_names(All) & .member(pepe,All) <-
+		.send(pepe,achieve,digoQue(Answer)).
+
 +!digoQue("calcular")[source(pepe)] <- -calcular(0); +calcular(1).
 
 +!digoQue(Frase):true.
