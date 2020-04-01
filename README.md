@@ -1,5 +1,5 @@
-﻿# Ejercicios-de-Sistemas-Inteligentes
-Entregas realizadas en dicha asignatura de 3º de Grado en Ingeniería Informática de Ourense.
+# SI
+Entregas realizadas en la asignatura de Sistemas inteligentes (SI) del tercer año del Grado de Ingeniería Informática de Ourense.
 
 Utilizamos Jason, que es un intérprete básado en java para una versión extendida de AgentSpeak (lenguaje de programación basado en un lenguaje de primer orden con acciones y eventos). Jason implementa la semántica operacional del lenguaje y proporciona una plataforma para el desarrollo de sistemas multi-agente.
 
